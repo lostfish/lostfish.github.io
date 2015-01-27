@@ -6,6 +6,8 @@
         <meta name="author" content="lostfish" />
         <meta name="copyright" content="lostfish" />
 
+        <meta name="description" content="一直想着搭建一个自己的网站，这次终于付诸行动了。参考了网上的许多资料，所以在这里就简单记录下自己的建站过程。 购买域名 从godaddy购买域名。也可用选择从万网和新网购买域名，这些网站还提供一条龙的服务，如提供主机，帮助备案等。 选择托管网站的主机 购买虚拟主机或者VPS，也可选择存储在github上，我选择的后者（以后有时间再买个主机试试）。如果要将网页放在github上，需要申请一个github账号，并创建一个与帐号同名的项目。具体参考 GitHub Pages。 生成网页 Github推荐使用Jekyll构建自己的github pages。由于偏好python，我选择的pelican（鹈鹕）。Pelican是一个python包，使用pelican生成博客框架的过程如下： sudo apt-get install python-pip pip install pelican pip install markdown mkdir myblog cd myblog pelican-quickstart 在myblog/content目录下编写markdown文件：test.md,然后在myblog目录下执行如下命令 ...
+" />
 <meta name="keywords" content="web, github, pelican, Tech, " />
         <title>建站备忘 - MyPlace
 </title>
@@ -243,7 +245,7 @@ SITEMAP = {
 <footer>
 <div id="footer">
     <ul class="footer-content">
-        <li class="elegant-license">Copyright@2015 Ke Tang. All Rights Reserved.</li>
+        <li class="elegant-license"><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"> MyPlace</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://oncrashreboot.com" property="cc:attributionName" rel="cc:attributionURL">lostfish</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_US">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.</li>
         <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a></li>
     </ul>
 </div>
