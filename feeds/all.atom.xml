@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>当你老了</title><link href="http://tangke.me/" rel="alternate"></link><link href="http://tangke.me/feeds/all.atom.xml" rel="self"></link><id>http://tangke.me/</id><updated>2015-01-24T00:00:00+08:00</updated><entry><title>建站备忘</title><link href="http://tangke.me/posts/2015/01/24/jian-zhan-bei-wang.html" rel="alternate"></link><updated>2015-01-24T00:00:00+08:00</updated><author><name>lostfish</name></author><id>tag:tangke.me,2015-01-24:posts/2015/01/24/jian-zhan-bei-wang.html</id><summary type="html">&lt;p&gt;一直想着搭建一个自己的网站，这次终于付诸行动了。参考了网上的许多资料，所以在这里就简单记录下自己的建站过程。&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>当你老了</title><link href="http://tangke.me/" rel="alternate"></link><link href="http://tangke.me/feeds/all.atom.xml" rel="self"></link><id>http://tangke.me/</id><updated>2015-07-04T00:00:00+08:00</updated><entry><title>dlib使用入门</title><link href="http://tangke.me/posts/2015/07/04/dlibshi-yong-ru-men.html" rel="alternate"></link><updated>2015-07-04T00:00:00+08:00</updated><author><name>lostfish</name></author><id>tag:tangke.me,2015-07-04:posts/2015/07/04/dlibshi-yong-ru-men.html</id><summary type="html">&lt;p&gt;dlib是一个比较知名的C++机器学习包，集成常用的算法，文档清晰，实例丰富，初步使用了一下，上手较快，编译也比较简单。&lt;/p&gt;
+&lt;h3 id="_1"&gt;安装&lt;/h3&gt;
+&lt;p&gt;首先从官网下载工具包，然后按照官网教程进行安装就可以了。&lt;/p&gt;
+&lt;h3 id="_2"&gt;聚类实验&lt;/h3&gt;
+&lt;p&gt;尝试使用dlib提供的kmeans算法进行了一次聚类实验。&amp;nbsp;&amp;#8230;&lt;/p&gt;</summary><category term="dlib"></category><category term="tools"></category><category term="c++"></category></entry><entry><title>建站备忘</title><link href="http://tangke.me/posts/2015/01/24/jian-zhan-bei-wang.html" rel="alternate"></link><updated>2015-01-24T00:00:00+08:00</updated><author><name>lostfish</name></author><id>tag:tangke.me,2015-01-24:posts/2015/01/24/jian-zhan-bei-wang.html</id><summary type="html">&lt;p&gt;一直想着搭建一个自己的网站，这次终于付诸行动了。参考了网上的许多资料，所以在这里就简单记录下自己的建站过程。&lt;/p&gt;
 &lt;h3 id="_1"&gt;购买域名&lt;/h3&gt;
 &lt;p&gt;从godaddy购买域名。也可用选择从万网和新网购买域名，这些网站还提供一条龙的服务，如提供主机，帮助备案等。&lt;/p&gt;
 &lt;h3 id="_2"&gt;选择托管网站的主机&lt;/h3&gt;
@@ -21,7 +25,7 @@ make serve
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;在myblog/output目录下会生成页面，在浏览器输入&lt;em&gt;localhost:8000&lt;/em&gt;可以查看结果。&lt;/p&gt;
+&lt;p&gt;在myblog/output目录下会生成页面，同时在浏览器输入&lt;em&gt;localhost:8000&lt;/em&gt;可以查看结果。&lt;/p&gt;
 &lt;p&gt;Markdown语法可参考 &lt;a href="https://help.github.com/articles/markdown-basics/"&gt;Markdown Basics&lt;/a&gt;，Ubuntu-14.04下貌似默认安装了编辑器retext。&lt;/p&gt;
 &lt;p&gt;此外，需要加入如下几个功能：&lt;/p&gt;
 &lt;ol&gt;
@@ -92,7 +96,7 @@ SITEMAP = {
 &lt;p&gt;将自己购买的域名与github&amp;nbsp;page绑定在一起需要3步：&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;在github pages项目下增加文件&lt;span class="caps"&gt;CNAME&lt;/span&gt;，在该文件中加入购买的域名。&lt;/li&gt;
-&lt;li&gt;在godaddy中将购买域名对应的域名解析服务器绑定到dnspod的服务器，可参考 &lt;a href="https://support.dnspod.cn/Kb/showarticle/?qtype=%E5%8A%9F%E8%83%BD%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B&amp;amp;tsid=42"&gt;教程&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;在godaddy中将购买域名对应的域名解析服务器绑定到dnspod的服务器，可参考: &lt;a href="https://support.dnspod.cn/Kb/showarticle/?qtype=%E5%8A%9F%E8%83%BD%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B&amp;amp;tsid=42"&gt;Godaddy注册商域名修改&lt;span class="caps"&gt;DNS&lt;/span&gt;地址&lt;/a&gt;。&lt;/li&gt;
 &lt;li&gt;注册dnspod账户，将自己购买的域名与github的服务器绑定,建立两条A类记指向192.30.252.153和192.30.252.154（这个&lt;span class="caps"&gt;IP&lt;/span&gt;可能会变化，参考github上 &lt;a href="https://help.github.com/articles/tips-for-configuring-an-a-record-with-your-dns-provider/"&gt;教程&lt;/a&gt;）。另外，这个配置最晚可能要等72小时之后才生效。  &lt;/li&gt;
 &lt;/ol&gt;
 &lt;h3 id="_5"&gt;有用参考&lt;/h3&gt;
