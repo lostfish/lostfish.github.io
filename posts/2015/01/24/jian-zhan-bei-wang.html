@@ -2,42 +2,60 @@
 <html lang="en-US">
     <head>
         <meta charset="utf-8"> 
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="author" content="lostfish" />
         <meta name="copyright" content="lostfish" />
 
         <meta name="description" content="一直想着搭建一个自己的网站，这次终于付诸行动了。参考了网上的许多资料，所以在这里就简单记录下自己的建站过程。 购买域名 从godaddy购买域名。也可用选择从万网和新网购买域名，这些网站还提供一条龙的服务，如提供主机，帮助备案等。 选择托管网站的主机 购买虚拟主机或者VPS，也可选择存储在github上，我选择的后者（以后有时间再买个主机试试）。如果要将网页放在github上，需要申请一个github账号，并创建一个与帐号同名的项目。具体参考 GitHub Pages。 生成网页 Github推荐使用Jekyll构建自己的github pages。由于偏好python，我选择的pelican（鹈鹕）。Pelican是一个python包，使用pelican生成博客框架的过程如下： sudo apt-get install python-pip pip install pelican pip install markdown mkdir myblog cd myblog pelican-quickstart 在myblog/content目录下编写markdown文件：test.md,然后在myblog目录下执行如下命令 ...
 " />
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary">
+
 <meta name="keywords" content="web, github, pelican, Tech, " />
-        <title>建站备忘 - 当你老了
+
+<meta property="og:title" content="建站备忘 "/>
+<meta property="og:url" content="/posts/2015/01/24/jian-zhan-bei-wang.html" />
+<meta property="og:description" content="一直想着搭建一个自己的网站，这次终于付诸行动了。参考了网上的许多资料，所以在这里就简单记录下自己的建站过程。 购买域名 从godaddy购买域名。也可用选择从万网和新网购买域名，这些网站还提供一条龙的服务，如提供主机，帮助备案等。 选择托管网站的主机 购买虚拟主机或者VPS，也可选择存储在github上，我选择的后者（以后有时间再买个主机试试）。如果要将网页放在github上，需要申请一个github账号，并创建一个与帐号同名的项目。具体参考 GitHub Pages。 生成网页 Github推荐使用Jekyll构建自己的github pages。由于偏好python，我选择的pelican（鹈鹕）。Pelican是一个python包，使用pelican生成博客框架的过程如下： sudo apt-get install python-pip pip install pelican pip install markdown mkdir myblog cd myblog pelican-quickstart 在myblog/content目录下编写markdown文件：test.md,然后在myblog目录下执行如下命令 ..." />
+<meta property="og:site_name" content="当你老了" />
+<meta property="og:article:author" content="lostfish" />
+<meta property="og:article:published_time" content="2015-01-24T00:00:00+08:00" />
+<meta name="twitter:title" content="建站备忘 ">
+<meta name="twitter:description" content="一直想着搭建一个自己的网站，这次终于付诸行动了。参考了网上的许多资料，所以在这里就简单记录下自己的建站过程。 购买域名 从godaddy购买域名。也可用选择从万网和新网购买域名，这些网站还提供一条龙的服务，如提供主机，帮助备案等。 选择托管网站的主机 购买虚拟主机或者VPS，也可选择存储在github上，我选择的后者（以后有时间再买个主机试试）。如果要将网页放在github上，需要申请一个github账号，并创建一个与帐号同名的项目。具体参考 GitHub Pages。 生成网页 Github推荐使用Jekyll构建自己的github pages。由于偏好python，我选择的pelican（鹈鹕）。Pelican是一个python包，使用pelican生成博客框架的过程如下： sudo apt-get install python-pip pip install pelican pip install markdown mkdir myblog cd myblog pelican-quickstart 在myblog/content目录下编写markdown文件：test.md,然后在myblog目录下执行如下命令 ...">
+
+        <title>建站备忘  · 当你老了
 </title>
-        <link href="/theme/css/slim-081711.css" rel="stylesheet" type="text/css">
-        <link href="/theme/css/bootstrap-combined.min.css" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="/theme/css/style.css" media="screen">
-        <link rel="stylesheet" type="text/css" href="/theme/css/solarizedlight.css" media="screen">
-        <link rel="shortcut icon" href="/theme/images/favicon.ico" type="image/x-icon" />
-        <link rel="apple-touch-icon" href="/theme/images/apple-touch-icon.png" />
-        <link rel="apple-touch-icon" sizes="57x57" href="/theme/images/apple-touch-icon-57x57.png" />
-        <link rel="apple-touch-icon" sizes="72x72" href="/theme/images/apple-touch-icon-72x72.png" />
-        <link rel="apple-touch-icon" sizes="114x114" href="/theme/images/apple-touch-icon-114x114.png" />
-        <link rel="apple-touch-icon" sizes="144x144" href="/theme/images/apple-touch-icon-144x144.png" />
-        <link rel="icon" href="/theme/images/apple-touch-icon-144x144.png" />
-    <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-58905600-1']);
-    _gaq.push(['_trackPageview']);
-    (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-    </script>
+        <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.1/css/font-awesome.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="/theme/css/pygments.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="/theme/tipuesearch/tipuesearch.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="/theme/css/elegant.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
+        <link rel="shortcut icon" href="/theme/images/favicon.ico" type="image/x-icon" type="image/png" />
+        <link rel="icon" href="/theme/images/apple-touch-icon-152x152.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/theme/images/apple-touch-icon.png"  type="image/png" />
+        <link rel="apple-touch-icon" sizes="57x57" href="/theme/images/apple-touch-icon-57x57.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="72x72" href="/theme/images/apple-touch-icon-72x72.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="76x76" href="/theme/images/apple-touch-icon-76x76.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="/theme/images/apple-touch-icon-114x114.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="120x120" href="/theme/images/apple-touch-icon-120x120.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="144x144" href="/theme/images/apple-touch-icon-144x144.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/theme/images/apple-touch-icon-152x152.png" type="image/png" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="当你老了 - Full Atom Feed" />
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-58905600-1', 'auto');
+    ga('send', 'pageview');
+</script>
     </head>
     <body>
         <div id="content-sans-footer">
         <div class="navbar navbar-static-top">
             <div class="navbar-inner">
-                <div class="container">
+                <div class="container-fluid">
                     <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
@@ -62,7 +80,7 @@
                 <div class="span10">
 <article>
 <div class="row-fluid">
-    <header class="page_header span10 offset2">
+    <header class="page-header span10 offset2">
     <h1><a href="/posts/2015/01/24/jian-zhan-bei-wang.html"> 建站备忘  </a></h1>
     </header>
 </div>
@@ -70,6 +88,7 @@
 <div class="row-fluid">
         <div class="span8 offset2 article-content">
 
+            
             <p>一直想着搭建一个自己的网站，这次终于付诸行动了。参考了网上的许多资料，所以在这里就简单记录下自己的建站过程。</p>
 <h3 id="_1">购买域名</h3>
 <p>从godaddy购买域名。也可用选择从万网和新网购买域名，这些网站还提供一条龙的服务，如提供主机，帮助备案等。</p>
@@ -172,24 +191,25 @@ SITEMAP = {
 <li><a href="http://www.pelicanthemes.com/">Pelican主题列表</a></li>
 <li><a href="http://oncrashreboot.com/elegant-best-pelican-theme-features">主题elegent配置说明</a></li>
 </ul>
+            
+            
+            <hr/>
             <aside>
             <nav>
-            <ul class="articles_timeline">
- 
-                <li class="next_article"><a href="/posts/2015/05/10/sha-men-san-ri-you.html" title="Next: 厦门三日游">厦门三日游</a> »</li>
+            <ul class="articles-timeline">
+                <li class="next-article"><a href="/posts/2015/05/10/sha-men-san-ri-you.html" title="Next: 厦门三日游">厦门三日游</a> »</li>
             </ul>
             </nav>
             </aside>
         </div>
         <section>
         <div class="span2" style="float:right;font-size:0.9em;">
- 
             <h4>Published</h4>
             <time pubdate="pubdate" datetime="2015-01-24T00:00:00+08:00"> 1月 24, 2015</time>
             <h4>Category</h4>
-            <a class="category-link" href="/categories.html#Tech-ref">Tech</a> 
+            <a class="category-link" href="/categories.html#tech-ref">Tech</a>
             <h4>Tags</h4>
-            <ul class="list-of-tags tags-in-article"> 
+            <ul class="list-of-tags tags-in-article">
                 <li><a href="/tags.html#github-ref">github
                     <span>1</span>
 </a></li>
@@ -200,15 +220,20 @@ SITEMAP = {
                     <span>1</span>
 </a></li>
             </ul>
-
+<h4>Stay in Touch</h4>
+    <a href="http://www.weibo.com/u/2272983007" title="My weibo Profile" class="sidebar-social-links" target="_blank">
+    <i class="fa fa-weibo sidebar-social-links"></i></a>
+    <a href="http://twitter.com/SeptWinds" title="My twitter Profile" class="sidebar-social-links" target="_blank">
+    <i class="fa fa-twitter sidebar-social-links"></i></a>
         </div>
         </section>
-    </div>
-    </article>
+</div>
+</article>
                 </div>
                 <div class="span1"></div>
             </div>
         </div>
+        <div id="push"></div>
     </div>
 <footer>
 <div id="footer">
@@ -218,7 +243,7 @@ SITEMAP = {
     </ul>
 </div>
 </footer>            <script src="http://code.jquery.com/jquery.min.js"></script>
-        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
         <script>
             function validateForm(query)
             {
@@ -226,5 +251,8 @@ SITEMAP = {
             }
         </script>
 
+    
     </body>
+    <!-- Theme: Elegant built for Pelican
+    License : http://oncrashreboot.com/pelican-elegant -->
 </html>
