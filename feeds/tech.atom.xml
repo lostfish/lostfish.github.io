@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom"><title>当你老了</title><link href="/" rel="alternate"></link><link href="/feeds/tech.atom.xml" rel="self"></link><id>/</id><updated>2016-08-27T00:00:00+08:00</updated><entry><title>Eclat算法实现</title><link href="/posts/2016/08/27/eclatsuan-fa-shi-xian.html" rel="alternate"></link><updated>2016-08-27T00:00:00+08:00</updated><author><name>lostfish</name></author><id>tag:,2016-08-27:posts/2016/08/27/eclatsuan-fa-shi-xian.html</id><summary type="html">&lt;h3 id="_1"&gt;基本原理&lt;/h3&gt;
 &lt;p&gt;Eclat是挖掘频繁项集的一种算法，相比较而言远，它远没有另外两种算法Apriori和&lt;span class="caps"&gt;FP&lt;/span&gt;-Growth那么出名，一个直接的证明就是以前读书的时候课本都没有介绍。&lt;/p&gt;
-&lt;p&gt;不过这个算法也有它自身的特点，基本原理和Apriori算法很相似，也是通过频繁K项集连接生成频繁K+1项集，但是比Apriori速度快很多，因为引入了倒排机制，保留了每个频繁项集对应的所有记录。这样，在连接生成频繁K+1项集的过程中，两个频繁K项集对应记录集合求交，就得到了这个K+1项集对应的记录集合，这个集合的size就是K+1项集的出现频数，通过与支持度比较就可以判断新产生的K+1项集是不是频繁的。从这个过程可以看出，Eclat算法只需要扫描一次记录库，而Apriori算法每次判断候选K+1项集是不是频繁的时候都要扫描一次记录库，所以Eclat比Apriori快也就不奇怪了。也不难看出，Eclat算法其实是用空间换取了时间，后续实验也证明了这个算法是比较耗费空间的。&lt;/p&gt;
+&lt;p&gt;不过这个算法也有它自身的特点，基本原理和Apriori算法很相似，也是通过频繁K项集连接生成频繁K+1项集，但是比Apriori速度快很多，因为引入了倒排机制，保留了每个频繁项集对应的所有记录。这样，在连接生成频繁K+1项集的过程中，两个频繁K项集对应记录集合求交，就得到了这个K+1项集对应的记录集合，这个集合的size就是K+1项集的出现频数，通过与支持度比较就可以判断新产生的K+1项集是不是频繁的。从这个过程可以看出，Eclat算法只需要扫描一次记录库，而Apriori算法每次判断候选K+1项集是不是频繁的时候都要扫描一次记录库，所以Eclat比Apriori快也就不奇怪了。不难看出，Eclat算法其实是用空间换取了时间，后续实验也证明了这个算法是比较耗费空间的。&lt;/p&gt;
 &lt;p&gt;举个例子（参考[1])：&amp;nbsp;有4条记录&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;tid item
 1   A,B
@@ -42,10 +42,10 @@ A,B,C   4    1
 &lt;li&gt;连接过程关键是比较前缀，比如有两个K项集，那么比较前k-1项是否相同，相同就把其中一个K项集最后一项追加到另一个最后，构成K+1项集，追加后要保证K+1项集是有序的。&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;从算法过程中还可以看出：频繁K项集的计算，需要把前面频繁1,2，..,&amp;nbsp;k-1项集都计算后才能进行。此外，频繁1项集和频繁2项集的计算需要特殊处理，不用比较前缀。&lt;/p&gt;
-&lt;p&gt;具体实现参考代码：&lt;/p&gt;
+&lt;p&gt;具体实现参考代码：&lt;a href="https://github.com/lostfish/eclat"&gt;https://github.com/lostfish/eclat&lt;/a&gt;&lt;/p&gt;
 &lt;h3 id="_3"&gt;实验结果&lt;/h3&gt;
 &lt;p&gt;测试数据采用和[2]相同的mushroom.dat，该数据集下载地址为[3]，下载后需要去掉每行最后的空格。&lt;/p&gt;
-&lt;p&gt;机器配置为：Intel(R) Xeon(R) &lt;span class="caps"&gt;CPU&lt;/span&gt; E5606  @&amp;nbsp;2.13GHz，8核，32G内存&lt;/p&gt;
+&lt;p&gt;机器配置为：Intel(R) Xeon(R) &lt;span class="caps"&gt;CPU&lt;/span&gt; E5606  @ 2.13GHz&amp;nbsp;(8核，32G内存)&lt;/p&gt;
 &lt;p&gt;测试结果如下：&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;最小支持度  频繁项集数  运行时间
 812(0.1)    574513  29.219
@@ -77,7 +77,7 @@ A,B,C   4    1
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;当支持度为812时，同时还观察了下空间消耗，占用内存达到了将近9G，比较惊人。当然这个数据集合本身频繁模式就比较多，平时应用中一般也不需要计算所有频繁项集，一般到频繁3项集或4项集就够了。另外算法本身也可以优化，比如记录集合用位图来表示。&lt;/p&gt;
+&lt;p&gt;同时还观察了下空间消耗，占用内存达到了将近9G，比较惊人。当然这个数据集合本身频繁模式就比较多，平时应用中一般也不需要计算所有频繁项集，一般到频繁3项集或4项集就够了。另外算法本身也可以优化，比如记录集合用位图来表示。&lt;/p&gt;
 &lt;h3 id="_4"&gt;相关参考&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;[1] &lt;a href="https://zh.wikipedia.org/zh/%E5%85%B3%E8%81%94%E5%BC%8F%E8%A7%84%E5%88%99"&gt;https://zh.wikipedia.org/zh/%E5%85%B3%E8%81%94%E5%&lt;span class="caps"&gt;BC&lt;/span&gt;%8F%E8%A7%84%E5%88%99&lt;/a&gt;&lt;/li&gt;
