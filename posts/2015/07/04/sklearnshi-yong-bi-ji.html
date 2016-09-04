@@ -89,10 +89,10 @@
         <div class="span8 offset2 article-content">
 
             
-            <p>sklearn全称为scikit-learn，是目前很流行的一个基于python的机器学习包，基本覆盖了常见的机器学习算法，如分类、回归、聚类、特征选择、模型选择以及数据预处理等任务对应的算法。文档和示例非常丰富，可视化展示也很方便，所以使用者众多，尤其是在 <a href="!https://www.kaggle.com/">Kaggle</a>&nbsp;数据分析竞赛中被参赛者广泛使用。</p>
+            <p>sklearn全称为scikit-learn，是目前很流行的一个基于python的机器学习包，基本覆盖了常见的机器学习算法，如分类、回归、聚类、特征选择、模型选择以及数据预处理等任务对应的算法。文档和示例非常丰富，可视化展示也很方便，所以使用者众多，尤其是在 <a href="https://www.kaggle.com/">Kaggle</a>&nbsp;数据分析竞赛中被参赛者广泛使用。</p>
 <p>关于该工具包的使用介绍网上已经非常多，所以这里只是整理和记录自己使用的一些心得。</p>
 <h3 id="_1">初始入门</h3>
-<p>最好入门方法就是参考官网的 <a href="!http://scikit-learn.org/stable/tutorial/index.html">Tutorials</a></p>
+<p>最好入门方法就是参考官网的 <a href="http://scikit-learn.org/stable/tutorial/index.html">Tutorials</a></p>
 <p>sklearn集成了一些常用的数据集，以方便测试相关算法，封装为datasets模块，如导入分类数据集合iris和digits，导入回归数据集diabetes</p>
 <div class="highlight"><pre><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
 <span class="n">iris</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_iris</span><span class="p">()</span>
@@ -126,7 +126,7 @@
 <p>所以首次加载的时候需要有点耐心，大概等待7分钟左右吧（国内环境）。</p>
 <p>当然也可以自己下载放到目录~/scikit_learn_data/20news_home，下载地址为：<a href="http://people.csail.mit.edu/jrennie/20Newsgroups/20news-bydate.tar.gz">http://people.csail.mit.edu/jrennie/20Newsgroups/20news-bydate.tar.gz</a>&nbsp;（文件大小为13.7M）</p>
 <h4 id="2">2.&nbsp;特征选择</h4>
-<p>最常见的就是词袋模型，每个词就是一个特征，特征权重为词频, 通过构建 <a href="http://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer">CountVectorizer</a>&nbsp;来向量化每篇文档：</p>
+<p>最常见的就是词袋模型，每个词就是一个特征，特征权重为词频，通过构建 <a href="http://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer">CountVectorizer</a>&nbsp;来向量化每篇文档：</p>
 <div class="highlight"><pre><span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="kn">import</span> <span class="n">CountVectorizer</span>
 
 <span class="n">vectorizer</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">(</span><span class="n">min_df</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -138,7 +138,8 @@
 <span class="p">]</span>
 <span class="n">X</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span>
 <span class="k">print</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">get_feature_names</span><span class="p">()</span>
-<span class="c">#[u&#39;and&#39;, u&#39;document&#39;, u&#39;first&#39;, u&#39;is&#39;, u&#39;one&#39;, u&#39;second&#39;, u&#39;the&#39;, u&#39;third&#39;, u&#39;this&#39;]</span>
+<span class="c">#[u&#39;and&#39;, u&#39;document&#39;, u&#39;first&#39;, u&#39;is&#39;, \</span>
+<span class="c">#u&#39;one&#39;, u&#39;second&#39;, u&#39;the&#39;, u&#39;third&#39;, u&#39;this&#39;]</span>
 
 <span class="k">for</span> <span class="n">word</span><span class="p">,</span><span class="n">index</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">vectorizer</span><span class="o">.</span><span class="n">vocabulary_</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span>  <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
     <span class="k">print</span> <span class="s">&quot;</span><span class="si">%s</span><span class="se">\t</span><span class="si">%d</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
@@ -170,7 +171,7 @@
 <li>函数get_feature_names()得到特征名称的list,&nbsp;特征名称为unicode字符串，而vectorizer的成员变量vocabulary_恰好是特征名称到特征索引的dict，这个索引就是get_feature_names()得到特征list的下标</li>
 <li>函数transform()将新的文本向量化</li>
 </ul>
-<p>通常情况下，每个特征权重会取tf-idf值，这个时候就应该使用 <a href="!http://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html#sklearn.feature_extraction.text.TfidfVectorizer">TfidfVectorizer</a></p>
+<p>通常情况下，每个特征权重会取tf-idf值，这个时候就应该使用 <a href="http://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html#sklearn.feature_extraction.text.TfidfVectorizer">TfidfVectorizer</a></p>
 <div class="highlight"><pre><span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="kn">import</span> <span class="n">TfidfVectorizer</span>
 <span class="n">vectorizer</span> <span class="o">=</span> <span class="n">TfidfVectorizer</span><span class="p">(</span><span class="n">min_df</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">use_idf</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="n">X</span> <span class="o">=</span> <span class="n">vectorizer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span>
@@ -198,7 +199,7 @@
 <h4 id="3">3.&nbsp;分类实验</h4>
 <p>直接参考文章： <a href="http://scikit-learn.org/stable/auto_examples/text/document_classification_20newsgroups.html#example-text-document-classification-20newsgroups-py">Classification of text documents using sparse&nbsp;features</a></p>
 <p>演示常见分类算法的效果，并且还使用卡方测试选取有效文本特征进行降维后再进行分类，运行结果如下：</p>
-<p><img alt="20newsgroup" src="/images/20newsgroups.png" /></p>
+<p><img alt="20newsgroup" src="/images/20newsgroup.png" /></p>
 <h3 id="_3">相关参考</h3>
 <ul>
 <li><a href="http://scikit-learn.org/">scikit-learn官网</a></li>
