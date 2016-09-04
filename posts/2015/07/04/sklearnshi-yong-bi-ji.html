@@ -106,8 +106,7 @@
 <h4 id="1">1.&nbsp;加载数据</h4>
 <p>数据集选取的是20newsgroups，该数据集包含20个新闻组约2万篇文档，加载方式也是通过sklearn.datasets模块，但是稍有不同，如下</p>
 <div class="highlight"><pre><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">fetch_20newsgroups</span>
-<span class="n">categories</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;alt.atheism&#39;</span><span class="p">,</span> <span class="s">&#39;soc.religion.christian&#39;</span><span class="p">,</span> <span class="s">&#39;comp.graphics&#39;</span><span class="p">,</span> <span class="s">&#39;sci.med&#39;</span><span class="p">]</span>
-<span class="n">twenty_train</span> <span class="o">=</span> <span class="n">fetch_20newsgroups</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="s">&#39;train&#39;</span><span class="p">,</span> <span class="n">categories</span><span class="o">=</span><span class="n">categories</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">twenty_train</span> <span class="o">=</span> <span class="n">fetch_20newsgroups</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="s">&#39;train&#39;</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 </pre></div>
 
 
@@ -126,7 +125,7 @@
 <p>所以首次加载的时候需要有点耐心，大概等待7分钟左右吧（国内环境）。</p>
 <p>当然也可以自己下载放到目录~/scikit_learn_data/20news_home，下载地址为：<a href="http://people.csail.mit.edu/jrennie/20Newsgroups/20news-bydate.tar.gz">http://people.csail.mit.edu/jrennie/20Newsgroups/20news-bydate.tar.gz</a>&nbsp;（文件大小为13.7M）</p>
 <h4 id="2">2.&nbsp;特征选择</h4>
-<p>最常见的就是词袋模型，每个词就是一个特征，特征权重为词频，通过构建 <a href="http://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer">CountVectorizer</a>&nbsp;来向量化每篇文档：</p>
+<p>最常见的就是词袋模型，每个词就是一个特征，特征权重为词频，通过构建<a href="http://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer">CountVectorizer</a>&nbsp;来向量化每篇文档：</p>
 <div class="highlight"><pre><span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="kn">import</span> <span class="n">CountVectorizer</span>
 
 <span class="n">vectorizer</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">(</span><span class="n">min_df</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
