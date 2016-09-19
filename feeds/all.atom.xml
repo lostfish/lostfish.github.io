@@ -385,7 +385,121 @@ crawl_page2 len: 0
 &lt;h3 id="_4"&gt;第三站&lt;/h3&gt;
 &lt;p&gt;沙岛，还是青海湖，但是体验沙漠游玩项目：骑骆驼，骑摩托，滑沙。&lt;/p&gt;
 &lt;h3 id="_5"&gt;最后一站&lt;/h3&gt;
-&lt;p&gt;彩虹部落&lt;/p&gt;</summary><category term="qinghai"></category><category term="travel"></category></entry><entry><title>厦门三日游</title><link href="/posts/2015/05/10/sha-men-san-ri-you.html" rel="alternate"></link><updated>2015-05-10T00:00:00+08:00</updated><author><name>lostfish</name></author><id>tag:,2015-05-10:posts/2015/05/10/sha-men-san-ri-you.html</id><summary type="html">&lt;p&gt;从5月8日到5月10日，跟着豪华旅行团，在厦门开心地玩了3天。&lt;/p&gt;
+&lt;p&gt;彩虹部落&lt;/p&gt;</summary><category term="qinghai"></category><category term="travel"></category></entry><entry><title>sklearn使用笔记</title><link href="/posts/2015/07/04/sklearnshi-yong-bi-ji.html" rel="alternate"></link><updated>2015-07-04T00:00:00+08:00</updated><author><name>lostfish</name></author><id>tag:,2015-07-04:posts/2015/07/04/sklearnshi-yong-bi-ji.html</id><summary type="html">&lt;p&gt;sklearn全称为scikit-learn，是目前很流行的一个基于python的机器学习包，基本覆盖了常见的机器学习算法，如分类、回归、聚类、特征选择、模型选择以及数据预处理等任务对应的算法。文档和示例非常丰富，可视化展示也很方便，所以使用者众多，尤其是在 &lt;a href="https://www.kaggle.com/"&gt;Kaggle&lt;/a&gt;&amp;nbsp;数据分析竞赛中被参赛者广泛使用。&lt;/p&gt;
+&lt;p&gt;关于该工具包的使用介绍网上已经非常多，所以这里只是整理和记录自己使用的一些心得。&lt;/p&gt;
+&lt;h3 id="_1"&gt;初始入门&lt;/h3&gt;
+&lt;p&gt;最好入门方法就是参考官网的 &lt;a href="http://scikit-learn.org/stable/tutorial/index.html"&gt;Tutorials&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;sklearn集成了一些常用的数据集，以方便测试相关算法，封装为datasets模块，如导入分类数据集合iris和digits，导入回归数据集diabetes&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;sklearn&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;datasets&lt;/span&gt;
+&lt;span class="n"&gt;iris&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;datasets&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;load_iris&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;digits&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;datasets&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;load_digits&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="n"&gt;diabetes&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;datasets&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;load_diabetes&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;具体如何在这些数据集合应用相关算法，官网Tutorials有详细的介绍，下面重点讲下文本分类。&lt;/p&gt;
+&lt;h3 id="_2"&gt;文本分类&lt;/h3&gt;
+&lt;h4 id="1"&gt;1.&amp;nbsp;加载数据&lt;/h4&gt;
+&lt;p&gt;数据集选取的是20newsgroups，该数据集包含20个新闻组约2万篇文档，加载方式也是通过sklearn.datasets模块，但是稍有不同，如下&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;sklearn.datasets&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;fetch_20newsgroups&lt;/span&gt;
+&lt;span class="n"&gt;twenty_train&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;fetch_20newsgroups&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;subset&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;train&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;shuffle&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;True&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;random_state&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;42&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;从上面可以看出，加载数据集实际上是调用函数fetch_20newsgroups()&lt;/p&gt;
+&lt;p&gt;在python命令行输入help(fetch_20newsgroups），可以查看相应参数说明，其中&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;subset: 指定加载训练集或测试集，或者两者，取值对应&amp;#8217;train&amp;#8217;, &amp;#8216;test&amp;#8217;,&amp;nbsp;&amp;#8216;all&amp;#8217;&lt;/li&gt;
+&lt;li&gt;data_home: 指定20newsgroups数据集所在路径，默认为&amp;nbsp;&amp;#8216;~/scikit_learn_data&amp;#8217;，Windows下对应为C:\Users\xxx\scikit_learn_data&lt;/li&gt;
+&lt;li&gt;categories:&amp;nbsp;指定要加载的类别list，默认为None，表示所有类别&lt;/li&gt;
+&lt;li&gt;shuffle：&amp;nbsp;是否要混洗数据&lt;/li&gt;
+&lt;li&gt;random_state：&amp;nbsp;混洗随机数的种子值&lt;/li&gt;
+&lt;li&gt;download_if_missing：&amp;nbsp;指定data_home下不存在数据集时是否下载，默认为True，表示下载&lt;/li&gt;
+&lt;li&gt;remove： 指定预处理文本的过滤策略，取值为元组 (&amp;#8216;headers&amp;#8217;, &amp;#8216;footers&amp;#8217;,&amp;nbsp;&amp;#8216;quotes&amp;#8217;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;刚开始测试这个数据集的时候，老是等半天没有结果。于是看了下对应的源代码./site-packages/sklearn/datasets/twenty_newsgroups.py，发现第一次加载的时候会下载数据集到~/scikit_learn_data/20news_home，下载完成后会解压然后压缩生成cache文件，即~/scikit_learn_data/20news-bydate.pkz，以后每次加载就读取该文件了。&lt;/p&gt;
+&lt;p&gt;所以首次加载的时候需要有点耐心，大概等待7分钟左右吧（国内环境）。&lt;/p&gt;
+&lt;p&gt;当然也可以自己下载放到目录~/scikit_learn_data/20news_home，下载地址为：&lt;a href="http://people.csail.mit.edu/jrennie/20Newsgroups/20news-bydate.tar.gz"&gt;http://people.csail.mit.edu/jrennie/20Newsgroups/20news-bydate.tar.gz&lt;/a&gt;&amp;nbsp;（文件大小为13.7M）&lt;/p&gt;
+&lt;h4 id="2"&gt;2.&amp;nbsp;特征选择&lt;/h4&gt;
+&lt;p&gt;最常见的就是词袋模型，每个词就是一个特征，特征权重为词频，通过构建&lt;a href="http://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.CountVectorizer.html#sklearn.feature_extraction.text.CountVectorizer"&gt;CountVectorizer&lt;/a&gt;&amp;nbsp;来向量化每篇文档：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;sklearn.feature_extraction.text&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;CountVectorizer&lt;/span&gt;
+
+&lt;span class="n"&gt;vectorizer&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;CountVectorizer&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;min_df&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;corpus&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+    &lt;span class="s"&gt;&amp;#39;This is the first document.&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="s"&gt;&amp;#39;This is the second second document.&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="s"&gt;&amp;#39;And the third one.&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="s"&gt;&amp;#39;Is this the first document?&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="n"&gt;X&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;vectorizer&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;fit_transform&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;corpus&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="n"&gt;vectorizer&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get_feature_names&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="c"&gt;#[u&amp;#39;and&amp;#39;, u&amp;#39;document&amp;#39;, u&amp;#39;first&amp;#39;, u&amp;#39;is&amp;#39;, \&lt;/span&gt;
+&lt;span class="c"&gt;#u&amp;#39;one&amp;#39;, u&amp;#39;second&amp;#39;, u&amp;#39;the&amp;#39;, u&amp;#39;third&amp;#39;, u&amp;#39;this&amp;#39;]&lt;/span&gt;
+
+&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;word&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;index&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;sorted&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;vectorizer&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;vocabulary_&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;items&lt;/span&gt;&lt;span class="p"&gt;(),&lt;/span&gt; &lt;span class="n"&gt;key&lt;/span&gt;  &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;lambda&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]):&lt;/span&gt;
+    &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="si"&gt;%s&lt;/span&gt;&lt;span class="se"&gt;\t&lt;/span&gt;&lt;span class="si"&gt;%d&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;%&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;word&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;index&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="c"&gt;# and   0&lt;/span&gt;
+&lt;span class="c"&gt;# document  1&lt;/span&gt;
+&lt;span class="c"&gt;# first 2&lt;/span&gt;
+&lt;span class="c"&gt;# is    3&lt;/span&gt;
+&lt;span class="c"&gt;# one   4&lt;/span&gt;
+&lt;span class="c"&gt;# second    5&lt;/span&gt;
+&lt;span class="c"&gt;# the   6&lt;/span&gt;
+&lt;span class="c"&gt;# third 7&lt;/span&gt;
+&lt;span class="c"&gt;# this  8&lt;/span&gt;
+
+&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;v&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;X&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="n"&gt;v&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;toarray&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="c"&gt;# [[0 1 1 1 0 0 1 0 1]]&lt;/span&gt;
+&lt;span class="c"&gt;# [[0 1 0 1 0 2 1 0 1]]&lt;/span&gt;
+&lt;span class="c"&gt;# [[1 0 0 0 1 0 1 1 0]]&lt;/span&gt;
+&lt;span class="c"&gt;# [[0 1 1 1 0 0 1 0 1]]&lt;/span&gt;
+
+&lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="n"&gt;vectorizer&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;transform&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;Something completely new.&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;])&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;toarray&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="c"&gt;# [[0 0 0 0 0 0 0 0 0]]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;上面代码中：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;函数fit_transform()会在训练数据上训练一个Vectorizer，并将训练数据向量化，由于文本特征维度较高，这里是用稀疏矩阵保存&lt;/li&gt;
+&lt;li&gt;函数get_feature_names()得到特征名称的list,&amp;nbsp;特征名称为unicode字符串，而vectorizer的成员变量vocabulary_恰好是特征名称到特征索引的dict，这个索引就是get_feature_names()得到特征list的下标&lt;/li&gt;
+&lt;li&gt;函数transform()将新的文本向量化&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;通常情况下，每个特征权重会取tf-idf值，这个时候就应该使用 &lt;a href="http://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html#sklearn.feature_extraction.text.TfidfVectorizer"&gt;TfidfVectorizer&lt;/a&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;sklearn.feature_extraction.text&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;TfidfVectorizer&lt;/span&gt;
+&lt;span class="n"&gt;vectorizer&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;TfidfVectorizer&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;min_df&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;use_idf&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;True&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;X&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;vectorizer&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;fit_transform&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;corpus&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;features&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;vectorizer&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get_feature_names&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;idf&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;enumerate&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;vectorizer&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;idf_&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="si"&gt;%s&lt;/span&gt;&lt;span class="se"&gt;\t&lt;/span&gt;&lt;span class="si"&gt;%.5f&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt; &lt;span class="o"&gt;%&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;features&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;encode&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;utf-8&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="n"&gt;idf&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="c"&gt;# and   1.91629&lt;/span&gt;
+&lt;span class="c"&gt;# document  1.22314&lt;/span&gt;
+&lt;span class="c"&gt;# first 1.51083&lt;/span&gt;
+&lt;span class="c"&gt;# is    1.22314&lt;/span&gt;
+&lt;span class="c"&gt;# one   1.91629&lt;/span&gt;
+&lt;span class="c"&gt;# second    1.91629&lt;/span&gt;
+&lt;span class="c"&gt;# the   1.00000&lt;/span&gt;
+&lt;span class="c"&gt;# third 1.91629&lt;/span&gt;
+&lt;span class="c"&gt;# this  1.22314&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;TfidfVectorizer成员函数与CountVectorizer一样，但是多了成员变量idf_,&amp;nbsp;为每个特征idf值构成的list。如果仅仅需要统计一份idf词表出来，也可以用TfidfVectorizer，idf计算公式为log((N+1)/(df+1))+1，分子分母都+1是假定增加一篇文档包含所有词。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;其他说明&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;如果有自己的词表，相当于预先指定了特征，那么可以用 &lt;a href="http://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.DictVectorizer.html#sklearn.feature_extraction.DictVectorizer"&gt;DictVectorizer&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;如果需要考虑短语或多词表达式，或者说考虑词之间的次序依赖关系，那么可以引入ngram模型，当ngram特征非常大的时候，需要考虑使用 &lt;a href="http://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.HashingVectorizer.html#sklearn.feature_extraction.text.HashingVectorizer"&gt;HashingVectorizer&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id="3"&gt;3.&amp;nbsp;分类实验&lt;/h4&gt;
+&lt;p&gt;直接参考文章： &lt;a href="http://scikit-learn.org/stable/auto_examples/text/document_classification_20newsgroups.html#example-text-document-classification-20newsgroups-py"&gt;Classification of text documents using sparse&amp;nbsp;features&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;演示常见分类算法的效果，并且还使用卡方测试选取有效文本特征进行降维后再进行分类，运行结果如下：&lt;/p&gt;
+&lt;p&gt;&lt;img alt="20newsgroup" src="/images/20newsgroup.png" /&gt;&lt;/p&gt;
+&lt;h3 id="_3"&gt;相关参考&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://scikit-learn.org/"&gt;scikit-learn官网&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="http://scikit-learn.org/stable/modules/feature_extraction.html"&gt;特征选择&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</summary><category term="sklearn"></category><category term="机器学习"></category></entry><entry><title>厦门三日游</title><link href="/posts/2015/05/10/sha-men-san-ri-you.html" rel="alternate"></link><updated>2015-05-10T00:00:00+08:00</updated><author><name>lostfish</name></author><id>tag:,2015-05-10:posts/2015/05/10/sha-men-san-ri-you.html</id><summary type="html">&lt;p&gt;从5月8日到5月10日，跟着豪华旅行团，在厦门开心地玩了3天。&lt;/p&gt;
 &lt;h3 id="_1"&gt;第一天&lt;/h3&gt;
 &lt;p&gt;下午坐动车去，落脚酒店,安顿下来后，去夜市逛了逛。&lt;/p&gt;
 &lt;h3 id="_2"&gt;第二天&lt;/h3&gt;
