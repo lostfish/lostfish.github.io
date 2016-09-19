@@ -1,5 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>当你老了</title><link href="/" rel="alternate"></link><link href="/feeds/tech.atom.xml" rel="self"></link><id>/</id><updated>2016-08-27T00:00:00+08:00</updated><entry><title>Eclat算法实现</title><link href="/posts/2016/08/27/eclatsuan-fa-shi-xian.html" rel="alternate"></link><updated>2016-08-27T00:00:00+08:00</updated><author><name>lostfish</name></author><id>tag:,2016-08-27:posts/2016/08/27/eclatsuan-fa-shi-xian.html</id><summary type="html">&lt;h3 id="_1"&gt;基本原理&lt;/h3&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>当你老了</title><link href="/" rel="alternate"></link><link href="/feeds/tech.atom.xml" rel="self"></link><id>/</id><updated>2016-09-17T00:00:00+08:00</updated><entry><title>TextRank算法实现</title><link href="/posts/2016/09/17/textranksuan-fa-shi-xian.html" rel="alternate"></link><updated>2016-09-17T00:00:00+08:00</updated><author><name>lostfish</name></author><id>tag:,2016-09-17:posts/2016/09/17/textranksuan-fa-shi-xian.html</id><summary type="html">&lt;h3 id="_1"&gt;算法原理&lt;/h3&gt;
+&lt;p&gt;TextRank算法主要用于文档的关键词抽取或者摘要抽取（本质是关键句抽取），原理就是PageRank的那一套思想，只不过构建图模型的时候稍有区别。&lt;/p&gt;
+&lt;p&gt;抽取关键词的时候，图的节点为词，边为滑动窗口中共现的词对，边的权重为两个词在滑动窗口中的共现次数。不是所有的词都考虑，一般只选取特定词性的词，如名词，形容词和动词。同时，滑动窗口也有一个长度，比如连续5个词。&lt;/p&gt;
+&lt;p&gt;抽取关键句的时候，图的节点为句子，边为文档中所有句子的两两组合，边的权重为两个句子的相似度，可分词后计算Jaccard相似度，或者更复杂点的提取语义向量计算余弦相似度，前者是原始论文[1]中的做法:
+&lt;/p&gt;
+&lt;div class="math"&gt;\begin{align} 
+Similarity(S_i,S_j)=\frac {|\{w_k|w_k\in S_i \&amp;amp; w_k\in S_j\}|}{log(|{S_i}|)+log(|S_j|)}
+\end{align}&lt;/div&gt;
+&lt;p&gt;有了图模型，就可以迭代计算每个节点的权重，然后对节点进行排序。[1]中给出的公式为：&lt;/p&gt;
+&lt;div class="math"&gt;\begin{align} 
+WS(V_i) = (1 - d) + d * \sum_{V_j\in In(V_i)} \frac{w_j_i}{\sum_{V_k\in Out(V_j)} w_j_k}WS(V_j)
+\end{align}&lt;/div&gt;
+&lt;p&gt;原始PageRank公式为：&lt;/p&gt;
+&lt;div class="math"&gt;\begin{align} 
+S(V_i) = (1 - d) + d * \sum_{j\in In(V_i)} \frac{1}{|Out(V_j)|}S(V_j)
+\end{align}&lt;/div&gt;
+&lt;p&gt;可以看出主要区别为：在PageRank中边的权重都是1，而在TextRank中边的权重是变化的。&lt;/p&gt;
+&lt;h3 id="_2"&gt;算法实现&lt;/h3&gt;
+&lt;p&gt;由于算法原理比较简单，实现起来也比较容易，用C++实现了一个版本，github地址为：&lt;a href="https://github.com/lostfish/textrank"&gt;https://github.com/lostfish/textrank&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;实现的关键是构建图。为了简化，同时原始论文中的实验也说明有向图和无向图得到的结果相差不大，所以这里构建的是无向加权图。&lt;/p&gt;
+&lt;p&gt;为节省空间，将词都映射为size_t类型的词&lt;span class="caps"&gt;ID&lt;/span&gt;。同时，用pair&lt;size_t, size_t&gt; 表示边，用map&lt;pair&lt;size_t, size_t&gt;, double&amp;gt; 存储边的权重。为计算方便，需要保留一个节点所有出度边的权重和，用map&lt;size_t, double&gt;来表示。&lt;/p&gt;
+&lt;p&gt;核心rank的过程见text_rank.cpp中的函数CalcWordScore()，终止条件为两个：一个是两次迭代词权重的变化值小于预先设定的阈值，如0.0001，另一个是达到最大迭代次数，如100次。满足任一条件都终止继续迭代，实验中发现一般迭代几十次就会终止。&lt;/p&gt;
+&lt;h3 id="_3"&gt;实验效果&lt;/h3&gt;
+&lt;p&gt;仅仅和tf抽取的结果做了对比，没和tf-idf作对比是因为idf先验的获取依赖具体应用。实验数据集为新闻长文档，发现text_rank的效果比按照tf排序的结果稍好。&lt;/p&gt;
+&lt;p&gt;具体实验数据待整理。&lt;/p&gt;
+&lt;p&gt;貌似在具体的应用上，现在还没有特别好的关键词抽取算法，就是那种比经典的tf-idf算法效果好很多的。在一般抽取关键词的场景下，根据具体应用的数据，整理一份idf先验词表，然后用tf-idf算法其实就可以了。当然候选词要精心筛选，至少有根据词性过滤。&lt;/p&gt;
+&lt;h3 id="_4"&gt;相关参考&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;[1] &lt;a href="http://acl.ldc.upenn.edu/acl2004/emnlp/pdf/Mihalcea.pdf"&gt;TextRank: Bringing Order into&amp;nbsp;Texts&lt;/a&gt;    &lt;/li&gt;
+&lt;/ul&gt;
+&lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width &lt; 768) ? "left" : align;
+        indent = (screen.width &lt; 768) ? "0em" : indent;
+        linebreak = (screen.width &lt; 768) ? 'true' : linebreak;
+    }
+    
+    var mathjaxscript = document.createElement('script');
+    var location_protocol = (false) ? 'https' : document.location.protocol;
+    if (location_protocol !== 'http' &amp;&amp; location_protocol !== 'https') location_protocol = 'https:';
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript'; 
+    mathjaxscript.src = location_protocol + '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+&lt;/script&gt;</summary><category term="TextRank"></category><category term="关键词抽取"></category></entry><entry><title>Eclat算法实现</title><link href="/posts/2016/08/27/eclatsuan-fa-shi-xian.html" rel="alternate"></link><updated>2016-08-27T00:00:00+08:00</updated><author><name>lostfish</name></author><id>tag:,2016-08-27:posts/2016/08/27/eclatsuan-fa-shi-xian.html</id><summary type="html">&lt;h3 id="_1"&gt;基本原理&lt;/h3&gt;
 &lt;p&gt;Eclat是挖掘频繁项集的一种算法，相比较而言远，它远没有另外两种算法Apriori和&lt;span class="caps"&gt;FP&lt;/span&gt;-Growth那么出名，一个直接的证明就是以前读书的时候课本都没有介绍。&lt;/p&gt;
 &lt;p&gt;不过这个算法也有它自身的特点，基本原理和Apriori算法很相似，也是通过频繁K项集连接生成频繁K+1项集，但是比Apriori速度快很多，因为引入了倒排机制，保留了每个频繁项集对应的所有记录。这样，在连接生成频繁K+1项集的过程中，两个频繁K项集对应记录集合求交，就得到了这个K+1项集对应的记录集合，这个集合的size就是K+1项集的出现频数，通过与支持度比较就可以判断新产生的K+1项集是不是频繁的。从这个过程可以看出，Eclat算法只需要扫描一次记录库，而Apriori算法每次判断候选K+1项集是不是频繁的时候都要扫描一次记录库，所以Eclat比Apriori快也就不奇怪了。不难看出，Eclat算法其实是用空间换取了时间，后续实验也证明了这个算法是比较耗费空间的。&lt;/p&gt;
 &lt;p&gt;举个例子（参考[1])：&amp;nbsp;有4条记录&lt;/p&gt;
