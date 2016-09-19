@@ -5,28 +5,28 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>/</loc>
-<lastmod>2016-09-19T23:39:54-00:00</lastmod>
+<lastmod>2016-09-19T23:48:47-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/archives.html</loc>
-<lastmod>2016-09-19T23:39:54-00:00</lastmod>
+<lastmod>2016-09-19T23:48:47-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/tags.html</loc>
-<lastmod>2016-09-19T23:39:54-00:00</lastmod>
+<lastmod>2016-09-19T23:48:47-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>/categories.html</loc>
-<lastmod>2016-09-19T23:39:54-00:00</lastmod>
+<lastmod>2016-09-19T23:48:47-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -55,13 +55,6 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>/posts/2016/07/03/qing-hai-xing.html</loc>
 <lastmod>2016-07-03T00:00:00+08:00</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.7</priority>
-</url>
-
-<url>
-<loc>/posts/2015/07/04/sklearnshi-yong-bi-ji.html</loc>
-<lastmod>2015-07-04T00:00:00+08:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.7</priority>
 </url>
