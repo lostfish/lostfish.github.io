@@ -7,7 +7,7 @@
         <meta name="author" content="lostfish" />
         <meta name="copyright" content="lostfish" />
 
-        <meta name="description" content="算法原理 TextRank算法主要用于文档的关键词抽取或者摘要抽取（本质是关键句抽取），原理就是PageRank的那一套思想，只不过构建图模型的时候稍有区别。 抽取关键词的时候，图的节点为词，边为滑动窗口中共现的词对，边的权重为两个词在滑动窗口中的共现次数。不是所有的词都考虑，一般只选取特定词性的词，如名词，形容词和动词。同时，滑动窗口也有一个长度，比如连续5个词。 抽取关键句的时候，图的节点为句子，边为文档中所有句子的两两组合，边的权重为两个句子的相似度，可分词后计算Jaccard相似度，或者更复杂点的提取语义向量计算余弦相似度，前者是原始论文[1]中的做法: \begin{align} Similarity(S_i,S_j)=\frac {|\{w_k|w_k\in S_i \&amp; w_k\in S_j\}|}{log(|{S_i}|)+log(|S_j|)} \end{align} 有了图模型，就可以迭代计算每个节点的权重，然后对节点进行排序。[1]中给出的公式为： \begin{align} WS(V_i) = (1 - d) + d * \sum_{V_j\in In(V_i)} \frac{w_j_i}{\sum_{V_k\in Out(V_j)} w_j_k}WS(V_j) \end{align} ...if (!document.getElementById(&#39;mathjaxscript_pelican_#%@#$@#&#39;)) { var align = &#34;center&#34;, indent = &#34;0em&#34;, linebreak = &#34;false&#34;; if (false) { align = (screen.width
+        <meta name="description" content="算法原理 TextRank算法主要用于文档的关键词抽取或者摘要抽取（本质是关键句抽取），原理就是PageRank的那一套思想，只不过构建图模型的时候稍有区别。 抽取关键词的时候，图的节点为词，边为滑动窗口中共现的词对，边的权重为两个词在滑动窗口中的共现次数。不是所有的词都考虑，一般只选取特定词性的词，如名词，形容词和动词。同时，滑动窗口也有一个长度，比如连续5个词。 抽取关键句的时候，图的节点为句子，边为文档中所有句子的两两组合，边的权重为两个句子的相似度，可分词后计算Jaccard相似度，或者更复杂点的提取语义向量计算余弦相似度，前者是原始论文[1]中的做法: \begin{align*} Similarity(S_i,S_j)=\frac {|\{w_k|w_k\in S_i \&amp; w_k\in S_j\}|}{log(|{S_i}|)+log(|S_j|)} \end{align*} 有了图模型，就可以迭代计算每个节点的权重，然后对节点进行排序。[1]中给出的公式为： \begin{align*} WS(V_i) = (1 - d) + d * \sum_{V_j\in In(V_i)} \frac{w_{ji}}{\sum_{V_k\in Out(V_j)} w_{jk}}WS(V_j) \end{align*} ...if (!document.getElementById(&#39;mathjaxscript_pelican_#%@#$@#&#39;)) { var align = &#34;center&#34;, indent = &#34;0em&#34;, linebreak = &#34;false&#34;; if (false) { align = (screen.width
 " />
         <meta property="og:type" content="article" />
         <meta name="twitter:card" content="summary">
@@ -16,12 +16,12 @@
 
 <meta property="og:title" content="TextRank算法实现 "/>
 <meta property="og:url" content="/posts/2016/09/17/textranksuan-fa-shi-xian.html" />
-<meta property="og:description" content="算法原理 TextRank算法主要用于文档的关键词抽取或者摘要抽取（本质是关键句抽取），原理就是PageRank的那一套思想，只不过构建图模型的时候稍有区别。 抽取关键词的时候，图的节点为词，边为滑动窗口中共现的词对，边的权重为两个词在滑动窗口中的共现次数。不是所有的词都考虑，一般只选取特定词性的词，如名词，形容词和动词。同时，滑动窗口也有一个长度，比如连续5个词。 抽取关键句的时候，图的节点为句子，边为文档中所有句子的两两组合，边的权重为两个句子的相似度，可分词后计算Jaccard相似度，或者更复杂点的提取语义向量计算余弦相似度，前者是原始论文[1]中的做法: \begin{align} Similarity(S_i,S_j)=\frac {|\{w_k|w_k\in S_i \&amp; w_k\in S_j\}|}{log(|{S_i}|)+log(|S_j|)} \end{align} 有了图模型，就可以迭代计算每个节点的权重，然后对节点进行排序。[1]中给出的公式为： \begin{align} WS(V_i) = (1 - d) + d * \sum_{V_j\in In(V_i)} \frac{w_j_i}{\sum_{V_k\in Out(V_j)} w_j_k}WS(V_j) \end{align} ...if (!document.getElementById(&#39;mathjaxscript_pelican_#%@#$@#&#39;)) { var align = &#34;center&#34;, indent = &#34;0em&#34;, linebreak = &#34;false&#34;; if (false) { align = (screen.width" />
+<meta property="og:description" content="算法原理 TextRank算法主要用于文档的关键词抽取或者摘要抽取（本质是关键句抽取），原理就是PageRank的那一套思想，只不过构建图模型的时候稍有区别。 抽取关键词的时候，图的节点为词，边为滑动窗口中共现的词对，边的权重为两个词在滑动窗口中的共现次数。不是所有的词都考虑，一般只选取特定词性的词，如名词，形容词和动词。同时，滑动窗口也有一个长度，比如连续5个词。 抽取关键句的时候，图的节点为句子，边为文档中所有句子的两两组合，边的权重为两个句子的相似度，可分词后计算Jaccard相似度，或者更复杂点的提取语义向量计算余弦相似度，前者是原始论文[1]中的做法: \begin{align*} Similarity(S_i,S_j)=\frac {|\{w_k|w_k\in S_i \&amp; w_k\in S_j\}|}{log(|{S_i}|)+log(|S_j|)} \end{align*} 有了图模型，就可以迭代计算每个节点的权重，然后对节点进行排序。[1]中给出的公式为： \begin{align*} WS(V_i) = (1 - d) + d * \sum_{V_j\in In(V_i)} \frac{w_{ji}}{\sum_{V_k\in Out(V_j)} w_{jk}}WS(V_j) \end{align*} ...if (!document.getElementById(&#39;mathjaxscript_pelican_#%@#$@#&#39;)) { var align = &#34;center&#34;, indent = &#34;0em&#34;, linebreak = &#34;false&#34;; if (false) { align = (screen.width" />
 <meta property="og:site_name" content="当你老了" />
 <meta property="og:article:author" content="lostfish" />
 <meta property="og:article:published_time" content="2016-09-17T00:00:00+08:00" />
 <meta name="twitter:title" content="TextRank算法实现 ">
-<meta name="twitter:description" content="算法原理 TextRank算法主要用于文档的关键词抽取或者摘要抽取（本质是关键句抽取），原理就是PageRank的那一套思想，只不过构建图模型的时候稍有区别。 抽取关键词的时候，图的节点为词，边为滑动窗口中共现的词对，边的权重为两个词在滑动窗口中的共现次数。不是所有的词都考虑，一般只选取特定词性的词，如名词，形容词和动词。同时，滑动窗口也有一个长度，比如连续5个词。 抽取关键句的时候，图的节点为句子，边为文档中所有句子的两两组合，边的权重为两个句子的相似度，可分词后计算Jaccard相似度，或者更复杂点的提取语义向量计算余弦相似度，前者是原始论文[1]中的做法: \begin{align} Similarity(S_i,S_j)=\frac {|\{w_k|w_k\in S_i \&amp; w_k\in S_j\}|}{log(|{S_i}|)+log(|S_j|)} \end{align} 有了图模型，就可以迭代计算每个节点的权重，然后对节点进行排序。[1]中给出的公式为： \begin{align} WS(V_i) = (1 - d) + d * \sum_{V_j\in In(V_i)} \frac{w_j_i}{\sum_{V_k\in Out(V_j)} w_j_k}WS(V_j) \end{align} ...if (!document.getElementById(&#39;mathjaxscript_pelican_#%@#$@#&#39;)) { var align = &#34;center&#34;, indent = &#34;0em&#34;, linebreak = &#34;false&#34;; if (false) { align = (screen.width">
+<meta name="twitter:description" content="算法原理 TextRank算法主要用于文档的关键词抽取或者摘要抽取（本质是关键句抽取），原理就是PageRank的那一套思想，只不过构建图模型的时候稍有区别。 抽取关键词的时候，图的节点为词，边为滑动窗口中共现的词对，边的权重为两个词在滑动窗口中的共现次数。不是所有的词都考虑，一般只选取特定词性的词，如名词，形容词和动词。同时，滑动窗口也有一个长度，比如连续5个词。 抽取关键句的时候，图的节点为句子，边为文档中所有句子的两两组合，边的权重为两个句子的相似度，可分词后计算Jaccard相似度，或者更复杂点的提取语义向量计算余弦相似度，前者是原始论文[1]中的做法: \begin{align*} Similarity(S_i,S_j)=\frac {|\{w_k|w_k\in S_i \&amp; w_k\in S_j\}|}{log(|{S_i}|)+log(|S_j|)} \end{align*} 有了图模型，就可以迭代计算每个节点的权重，然后对节点进行排序。[1]中给出的公式为： \begin{align*} WS(V_i) = (1 - d) + d * \sum_{V_j\in In(V_i)} \frac{w_{ji}}{\sum_{V_k\in Out(V_j)} w_{jk}}WS(V_j) \end{align*} ...if (!document.getElementById(&#39;mathjaxscript_pelican_#%@#$@#&#39;)) { var align = &#34;center&#34;, indent = &#34;0em&#34;, linebreak = &#34;false&#34;; if (false) { align = (screen.width">
 
         <title>TextRank算法实现  · 当你老了
 </title>
@@ -94,17 +94,17 @@
 <p>抽取关键词的时候，图的节点为词，边为滑动窗口中共现的词对，边的权重为两个词在滑动窗口中的共现次数。不是所有的词都考虑，一般只选取特定词性的词，如名词，形容词和动词。同时，滑动窗口也有一个长度，比如连续5个词。</p>
 <p>抽取关键句的时候，图的节点为句子，边为文档中所有句子的两两组合，边的权重为两个句子的相似度，可分词后计算Jaccard相似度，或者更复杂点的提取语义向量计算余弦相似度，前者是原始论文[1]中的做法:
 </p>
-<div class="math">\begin{align} 
+<div class="math">\begin{align*} 
 Similarity(S_i,S_j)=\frac {|\{w_k|w_k\in S_i \&amp; w_k\in S_j\}|}{log(|{S_i}|)+log(|S_j|)}
-\end{align}</div>
+\end{align*}</div>
 <p>有了图模型，就可以迭代计算每个节点的权重，然后对节点进行排序。[1]中给出的公式为：</p>
-<div class="math">\begin{align} 
-WS(V_i) = (1 - d) + d * \sum_{V_j\in In(V_i)} \frac{w_j_i}{\sum_{V_k\in Out(V_j)} w_j_k}WS(V_j)
-\end{align}</div>
+<div class="math">\begin{align*} 
+WS(V_i) = (1 - d) + d * \sum_{V_j\in In(V_i)} \frac{w_{ji}}{\sum_{V_k\in Out(V_j)} w_{jk}}WS(V_j)
+\end{align*}</div>
 <p>原始PageRank公式为：</p>
-<div class="math">\begin{align} 
+<div class="math">\begin{align*} 
 S(V_i) = (1 - d) + d * \sum_{j\in In(V_i)} \frac{1}{|Out(V_j)|}S(V_j)
-\end{align}</div>
+\end{align*}</div>
 <p>可以看出主要区别为：在PageRank中边的权重都是1，而在TextRank中边的权重是变化的。</p>
 <h3 id="_2">算法实现</h3>
 <p>由于算法原理比较简单，实现起来也比较容易，用C++实现了一个版本，github地址为：<a href="https://github.com/lostfish/textrank">https://github.com/lostfish/textrank</a></p>

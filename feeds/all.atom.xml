@@ -4,17 +4,17 @@
 &lt;p&gt;抽取关键词的时候，图的节点为词，边为滑动窗口中共现的词对，边的权重为两个词在滑动窗口中的共现次数。不是所有的词都考虑，一般只选取特定词性的词，如名词，形容词和动词。同时，滑动窗口也有一个长度，比如连续5个词。&lt;/p&gt;
 &lt;p&gt;抽取关键句的时候，图的节点为句子，边为文档中所有句子的两两组合，边的权重为两个句子的相似度，可分词后计算Jaccard相似度，或者更复杂点的提取语义向量计算余弦相似度，前者是原始论文[1]中的做法:
 &lt;/p&gt;
-&lt;div class="math"&gt;\begin{align} 
+&lt;div class="math"&gt;\begin{align*} 
 Similarity(S_i,S_j)=\frac {|\{w_k|w_k\in S_i \&amp;amp; w_k\in S_j\}|}{log(|{S_i}|)+log(|S_j|)}
-\end{align}&lt;/div&gt;
+\end{align*}&lt;/div&gt;
 &lt;p&gt;有了图模型，就可以迭代计算每个节点的权重，然后对节点进行排序。[1]中给出的公式为：&lt;/p&gt;
-&lt;div class="math"&gt;\begin{align} 
-WS(V_i) = (1 - d) + d * \sum_{V_j\in In(V_i)} \frac{w_j_i}{\sum_{V_k\in Out(V_j)} w_j_k}WS(V_j)
-\end{align}&lt;/div&gt;
+&lt;div class="math"&gt;\begin{align*} 
+WS(V_i) = (1 - d) + d * \sum_{V_j\in In(V_i)} \frac{w_{ji}}{\sum_{V_k\in Out(V_j)} w_{jk}}WS(V_j)
+\end{align*}&lt;/div&gt;
 &lt;p&gt;原始PageRank公式为：&lt;/p&gt;
-&lt;div class="math"&gt;\begin{align} 
+&lt;div class="math"&gt;\begin{align*} 
 S(V_i) = (1 - d) + d * \sum_{j\in In(V_i)} \frac{1}{|Out(V_j)|}S(V_j)
-\end{align}&lt;/div&gt;
+\end{align*}&lt;/div&gt;
 &lt;p&gt;可以看出主要区别为：在PageRank中边的权重都是1，而在TextRank中边的权重是变化的。&lt;/p&gt;
 &lt;h3 id="_2"&gt;算法实现&lt;/h3&gt;
 &lt;p&gt;由于算法原理比较简单，实现起来也比较容易，用C++实现了一个版本，github地址为：&lt;a href="https://github.com/lostfish/textrank"&gt;https://github.com/lostfish/textrank&lt;/a&gt;&lt;/p&gt;
@@ -371,7 +371,250 @@ crawl_page2 len: 0
 &lt;ul&gt;
 &lt;li&gt;&lt;a href="http://www.programgo.com/article/11342723643/"&gt;http://www.programgo.com/article/11342723643/&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href="http://www.cnblogs.com/gala/archive/2011/09/22/2184801.html"&gt;http://www.cnblogs.com/gala/archive/2011/09/22/2184801.html&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</summary><category term="python"></category><category term="代理"></category><category term="下载"></category></entry><entry><title>青海行</title><link href="/posts/2016/07/03/qing-hai-xing.html" rel="alternate"></link><updated>2016-07-03T00:00:00+08:00</updated><author><name>lostfish</name></author><id>tag:,2016-07-03:posts/2016/07/03/qing-hai-xing.html</id><summary type="html">&lt;p&gt;六月是个好月份，适合旅行。&lt;/p&gt;
+&lt;/ul&gt;</summary><category term="python"></category><category term="代理"></category><category term="下载"></category></entry><entry><title>LDA算法理解</title><link href="/posts/2016/07/13/ldasuan-fa-li-jie.html" rel="alternate"></link><updated>2016-07-13T00:00:00+08:00</updated><author><name>lostfish</name></author><id>tag:,2016-07-13:posts/2016/07/13/ldasuan-fa-li-jie.html</id><summary type="html">&lt;h3 id="_1"&gt;引言&lt;/h3&gt;
+&lt;p&gt;&lt;span class="caps"&gt;LDA&lt;/span&gt;相关的资料已经非常丰富，比较好的如[1], [2], [3], [4] 和&amp;nbsp;[5]。 &lt;/p&gt;
+&lt;p&gt;[1]是一篇中文博文，核心的点都提到了，基本参考了[2], [3],&amp;nbsp;[4]的内容。&lt;/p&gt;
+&lt;p&gt;[2]是一篇科普佳作，结合数学史，把&lt;span class="caps"&gt;LDA&lt;/span&gt;涉及的很多函数及背后的数据原理通俗地讲了一遍，适合慢慢品读。&lt;/p&gt;
+&lt;p&gt;由于原始的&lt;span class="caps"&gt;LDA&lt;/span&gt;训练很慢，[3]主要讲了&lt;span class="caps"&gt;LDA&lt;/span&gt;的并行化实现，但是文献对&lt;span class="caps"&gt;LDA&lt;/span&gt;使用Gibbs采样涉及的公式进行了严密的推导，适合了解算法推导的每个环节。&lt;/p&gt;
+&lt;p&gt;[4]是较早一篇比较详细讲解&lt;span class="caps"&gt;LDA&lt;/span&gt;的论文，基本上[1], [2], [3]都参考了该文献, 并且GibbsLDA++&amp;nbsp;的实现，也是主要参考该论文。&lt;/p&gt;
+&lt;p&gt;[5]讲述了&lt;span class="caps"&gt;LDA&lt;/span&gt;涉及的概率图模型的更多相关知识，但是还是需要有一定概率图理论基础。&lt;/p&gt;
+&lt;p&gt;总的来说，&lt;span class="caps"&gt;LDA&lt;/span&gt;算法的推导还是需要一定数理基础，但是Gibbs采样的实现却非常简单，伪代码一看就懂。&lt;/p&gt;
+&lt;h3 id="_2"&gt;模型理解&lt;/h3&gt;
+&lt;p&gt;简单地再次总结下要点。&lt;/p&gt;
+&lt;p&gt;概率基础：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;多项分布&lt;/li&gt;
+&lt;li&gt;狄利克雷分布：容易发现先验是狄利克雷分布，似然是多项分布，两者相乘得到的后验也是狄利克雷分布&lt;/li&gt;
+&lt;li&gt;Delta函数，Gama函数： 狄利克雷分布函数中有一个Delta函数，有的地方也说Beta函数，可以表示成Gama函数的形式，而Gama(x+1) = x *&amp;nbsp;Game(x)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Gibbs Sampling&amp;nbsp;推导过程：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;写出主题和词的联合概率公式，利用狄利克雷分布连乘部分积分等于Delta函数的性质，可以将联合分布只用Delta函数表示&lt;/li&gt;
+&lt;li&gt;写出排除当前词主题的条件概率公式，其实就是1中得到的两个联合概率的比值，全部都是Delta函数，而Delta函数又都可以表示成Gama函数，利用Gama(x+1) = x *&amp;nbsp;Game(x)的性质，得到最终结果，这个就是Gibbs采样公式&lt;/li&gt;
+&lt;li&gt;采样结束后，得到每篇文档每个词的主题，根据Dirichlet分布的期望，得到doc-topic这个多项分布的参数theta，以及topic-word这个多项分布的参数phi&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id="gibbslda"&gt;GibbsLDA++代码剖析&lt;/h3&gt;
+&lt;p&gt;相关编译和运行可以直接参考官方文档，这里只剖析一下代码。&lt;/p&gt;
+&lt;p&gt;整个代码的实现偏C风格，结构很清晰，注释也很丰富。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;lda.cpp&amp;nbsp;主函数&lt;/li&gt;
+&lt;li&gt;model.h&amp;nbsp;定义了类model，核心实现&lt;/li&gt;
+&lt;li&gt;dataset.h&amp;nbsp;定义了类document和类dataset，存储输入文档数据&lt;/li&gt;
+&lt;li&gt;constants.h 定义了&lt;span class="caps"&gt;BUFF&lt;/span&gt;值和模型状态值&lt;/li&gt;
+&lt;li&gt;strtokenizer.h&amp;nbsp;定义类strtokenizer，分割文本并保存token&lt;/li&gt;
+&lt;li&gt;utils.h 定义类&amp;nbsp;utils，包含解析参数，生成模型保存名称，排序等函数&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;主要是理解类model的实现，&lt;span class="caps"&gt;LDA&lt;/span&gt;训练相关参数如下，其中alpha和beta对K维都是一样的：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;// --- model parameters and variables ---    
+int M; // dataset size (i.e., number of docs)
+int V; // vocabulary size
+int K; // number of topics
+double alpha, beta; // LDA hyperparameters 
+int niters; // number of Gibbs sampling iterations
+int liter; // the iteration at which the model was saved
+int savestep; // saving period
+int twords; // print out top words per each topic
+int withrawstrs;
+
+double * p; // temp variable for sampling
+int ** z; // topic assignments for words, size M x doc.size()
+int ** nw; // cwt[i][j]: number of instances of word/term i assigned to topic j, size V x K
+int ** nd; // na[i][j]: number of words in document i assigned to topic j, size M x K
+int * nwsum; // nwsum[j]: total number of words assigned to topic j, size K
+int * ndsum; // nasum[i]: total number of words in document i, size M
+double ** theta; // theta: document-topic distributions, size M x K
+double ** phi; // phi: topic-word distributions, size K x V
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;关键函数如下：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;// init for estimation
+int init_est();
+int init_estc();
+
+// estimate LDA model using Gibbs sampling
+void estimate();
+int sampling(int m, int n);
+void compute_theta();
+void compute_phi();
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;init_est()从头开始训练，init_estc()继续训练。文档为M，词表为V，主题数为K，初始状态下，每个词对主题k的数目nw[w][k]都为0，每个文档对主题k的数目nd[m][k]也都为0，每个主题的数目nwsum[k]均为0，每篇文档的词数ndsum[m]均为0。然后对于每篇文档的每个词，随机采样一个主题，更新数组nw, nd, nwsum, ndsum。theta数组为M*K，&amp;nbsp;phi数组为K*V。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;z = new int*[M];
+for (m = 0; m &amp;lt; ptrndata-&amp;gt;M; m++) {
+int N = ptrndata-&amp;gt;docs[m]-&amp;gt;length;
+z[m] = new int[N];
+
+    // initialize for z
+    for (n = 0; n &amp;lt; N; n++) {
+        int topic = (int)(((double)random() / RAND_MAX) * K);
+        z[m][n] = topic;
+
+        // number of instances of word i assigned to topic j
+        nw[ptrndata-&amp;gt;docs[m]-&amp;gt;words[n]][topic] += 1;
+        // number of words in document i assigned to topic j
+        nd[m][topic] += 1;
+        // total number of words assigned to topic j
+        nwsum[topic] += 1;
+    } 
+    // total number of words in document i
+    ndsum[m] = N;      
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;estimate()进行训练，对于每篇文档的每个词，采样一个主题，然后保存模型，并且计算theta和phi：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;// for all z_i
+for (int m = 0; m &amp;lt; M; m++) {
+    for (int n = 0; n &amp;lt; ptrndata-&amp;gt;docs[m]-&amp;gt;length; n++) {
+    // (z_i = z[m][n])
+    // sample from p(z_i|z_-i, w)
+    int topic = sampling(m, n);
+    z[m][n] = topic;
+    }
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;sampling(int m, int&amp;nbsp;n)函数使用Gibbs采样公式计算当前词的主题分布，然后随机选择一个主题，用到了累计概率值高于随机值的方式，类似轮盘赌：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;int model::sampling(int m, int n) {
+    // remove z_i from the count variables
+    int topic = z[m][n];
+    int w = ptrndata-&amp;gt;docs[m]-&amp;gt;words[n];
+    nw[w][topic] -= 1;
+    nd[m][topic] -= 1;
+    nwsum[topic] -= 1;
+    ndsum[m] -= 1;
+
+    double Vbeta = V * beta;
+    double Kalpha = K * alpha;    
+    // do multinomial sampling via cumulative method
+    for (int k = 0; k &amp;lt; K; k++) {
+    p[k] = (nw[w][k] + beta) / (nwsum[k] + Vbeta) *
+            (nd[m][k] + alpha) / (ndsum[m] + Kalpha);
+    }
+    // cumulate multinomial parameters
+    for (int k = 1; k &amp;lt; K; k++) {
+    p[k] += p[k - 1];
+    }
+    // scaled sample because of unnormalized p[]
+    double u = ((double)random() / RAND_MAX) * p[K - 1];
+
+    for (topic = 0; topic &amp;lt; K; topic++) {
+    if (p[topic] &amp;gt; u) {
+        break;
+    }
+    }
+
+    // add newly estimated z_i to count variables
+    nw[w][topic] += 1;
+    nd[m][topic] += 1;
+    nwsum[topic] += 1;
+    ndsum[m] += 1;
+
+    return topic;
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;compute_theta()函数调用了推导公式：
+&lt;/p&gt;
+&lt;div class="math"&gt;\begin{align*} 
+\hat{\theta}_{mk} &amp;amp;= \frac{n_{m}^{(k)} + \alpha_k}{\sum_{k=1}^K (n_{m}^{(k)} + \alpha_k)} 
+\end{align*}&lt;/div&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;for (int m = 0; m &amp;lt; M; m++) {
+for (int k = 0; k &amp;lt; K; k++) {
+    theta[m][k] = (nd[m][k] + alpha) / (ndsum[m] + K * alpha);
+}
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;compute_phi()函数调用了推导公式：
+&lt;/p&gt;
+&lt;div class="math"&gt;\begin{align*} 
+\hat{\varphi}_{kw} &amp;amp;= \frac{n_{k}^{(w)} + \beta_t}{\sum_{w=1}^V (n_{k}^{(w)} + \beta_w)} 
+\end{align*}&lt;/div&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;for (int k = 0; k &amp;lt; K; k++) {
+for (int w = 0; w &amp;lt; V; w++) {
+    phi[k][w] = (nw[w][k] + beta) / (nwsum[k] + V * beta);
+}
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;对新的数据推导主题分布时，重新走了一遍Gibbs采样，相应的计算theta和phi的公式不变，但有略微调整，这里不再赘述。&lt;/p&gt;
+&lt;h3 id="lda"&gt;&lt;span class="caps"&gt;LDA&lt;/span&gt;开源工具包&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://gibbslda.sourceforge.net/"&gt;GibbsLDA++&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://code.google.com/p/plda/"&gt;plda&lt;/a&gt; (&lt;a href="https://github.com/openbigdatagroup/plda"&gt;地址2&lt;/a&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id="_3"&gt;相关参考&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;[1] &lt;a href="http://blog.csdn.net/yangliuy/article/details/8302599"&gt;概率语言模型及其变形系列(2)-&lt;span class="caps"&gt;LDA&lt;/span&gt;及Gibbs&amp;nbsp;Sampling&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;[2] &lt;a href="http://www.52nlp.cn/lda-math-%E6%B1%87%E6%80%BB-lda%E6%95%B0%E5%AD%A6%E5%85%AB%E5%8D%A6"&gt;&lt;span class="caps"&gt;LDA&lt;/span&gt;数学八卦&lt;/a&gt; (&lt;a href="http://vdisk.weibo.com/s/q0sGh/1360334108"&gt;pdf&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;[3] Distributed Gibbs Sampling of Latent Topic
+Models: The Gritty Details (&lt;a href="https://cxwangyi.files.wordpress.com/2012/01/llt.pdf"&gt;pdf&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;[4] Parameter estimation for text analysis (&lt;a href="http://www.arbylon.net/publications/text-est.pdf"&gt;pdf&lt;/a&gt;)&lt;/li&gt;
+&lt;li&gt;[5] Graphical Representation, Generative Model and Gibbs Sampling (&lt;a href="http://home.in.tum.de/~xiaoh/pub/3G_talk.pdf"&gt;pdf&lt;/a&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width &lt; 768) ? "left" : align;
+        indent = (screen.width &lt; 768) ? "0em" : indent;
+        linebreak = (screen.width &lt; 768) ? 'true' : linebreak;
+    }
+    
+    var mathjaxscript = document.createElement('script');
+    var location_protocol = (false) ? 'https' : document.location.protocol;
+    if (location_protocol !== 'http' &amp;&amp; location_protocol !== 'https') location_protocol = 'https:';
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript'; 
+    mathjaxscript.src = location_protocol + '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+&lt;/script&gt;</summary><category term="lda"></category><category term="主题模型"></category></entry><entry><title>青海行</title><link href="/posts/2016/07/03/qing-hai-xing.html" rel="alternate"></link><updated>2016-07-03T00:00:00+08:00</updated><author><name>lostfish</name></author><id>tag:,2016-07-03:posts/2016/07/03/qing-hai-xing.html</id><summary type="html">&lt;p&gt;六月是个好月份，适合旅行。&lt;/p&gt;
 &lt;p&gt;从22号到26号共五天的时间里，跟团去大青海体验了祖国西部的大好河山。&lt;/p&gt;
 &lt;h3 id="_1"&gt;启程&lt;/h3&gt;
 &lt;p&gt;傍晚时分，天气正好，带一丝燥热，跟随大队伍从深圳宝启程啦。
