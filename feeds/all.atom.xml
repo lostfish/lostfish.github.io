@@ -436,56 +436,45 @@ crawl_page2 len: 0
 &lt;h3 id="_2"&gt;模型理解&lt;/h3&gt;
 &lt;p&gt;简单地再次总结下要点。&lt;/p&gt;
 &lt;p&gt;概率基础：&lt;/p&gt;
-&lt;ol&gt;
+&lt;ul&gt;
 &lt;li&gt;多项分布
 &lt;div class="math"&gt;\begin{align*} 
 \displaystyle Mult(\overrightarrow{n} |\overrightarrow{p},N) = \binom{N}{\overrightarrow{n}}\prod_{k=1}^K p_k^{n_k} 
 \end{align*}&lt;/div&gt;
 &lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;狄利克雷分布：容易发现先验是狄利克雷分布，似然是多项分布，两者相乘得到的后验也是狄利克雷分布
+&lt;li&gt;狄利克雷分布：容易发现先验是狄利克雷分布，似然是多项分布，两者相乘得到的后验也是狄利克雷分布
 &lt;div class="math"&gt;\begin{align*} 
 \displaystyle Dir(\overrightarrow{p}|\overrightarrow{\alpha}) 
-&amp;amp; = \displaystyle \frac{\Gamma(\sum_{k=1}^K\alpha_k)} 
-{\prod_{k=1}^K\Gamma(\alpha_k)} \prod_{k=1}^K p_k^{\alpha_k-1} \\
+&amp;amp; = \displaystyle \frac{\Gamma(\sum_{k=1}^K\alpha_k)} {\prod_{k=1}^K\Gamma(\alpha_k)} \prod_{k=1}^K p_k^{\alpha_k-1} \\
 &amp;amp; = \frac{1}{\Delta(\overrightarrow{\alpha})} \prod_{k=1}^K p_k^{\alpha_k-1}} \\
 \end{align*}&lt;/div&gt;
 &lt;div class="math"&gt;\begin{align*} 
 \int_{\overrightarrow{p}}^{} \prod_{k=1}^K p_k^{\alpha_k-1} = \Delta(\overrightarrow{\alpha})
 \end{align*}&lt;/div&gt;
-&lt;/p&gt;
 &lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Delta函数/Gama函数： 狄利克雷分布函数中有一个Delta函数，有的地方也说Beta函数，可以表示成Gama函数的形式，而Gama(x+1) = x * Game(x)
+&lt;li&gt;Delta函数/Gama函数： 狄利克雷分布函数中有一个Delta函数，有的地方也说Beta函数，可以表示成Gama函数的形式，而Gama(x+1) = x * Game(x)
 &lt;div class="math"&gt;\begin{align*} 
 \Delta(\overrightarrow{\alpha}) = \frac{\prod_{k=1}^K\Gamma(\alpha_k)} {\Gamma(\sum_{k=1}^K\alpha_k)}
 \end{align*}&lt;/div&gt;
-&lt;/p&gt;
 &lt;/li&gt;
-&lt;/ol&gt;
+&lt;/ul&gt;
 &lt;p&gt;Gibbs Sampling&amp;nbsp;推导过程：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;写出主题和词的联合概率公式，利用狄利克雷分布连乘部分积分等于Delta函数的性质，可以将联合分布只用Delta函数表示&lt;/li&gt;
-&lt;/ol&gt;
+&lt;p&gt;1)&amp;nbsp;写出主题和词的联合概率公式，利用狄利克雷分布连乘部分积分等于Delta函数的性质，可以将联合分布只用Delta函数表示&lt;/p&gt;
 &lt;div class="math"&gt;\begin{align} 
-p(\overrightarrow{\mathbf{w}},\overrightarrow{\mathbf{z}} |\overrightarrow{\alpha}, \overrightarrow{\beta}) 
+p(\overrightarrow{\mathbf{w}},\overrightarrow{\mathbf{z}} |\overrightarrow{\alpha}, \overrightarrow{\beta}) \\
 &amp;amp;= p(\overrightarrow{\mathbf{w}} |\overrightarrow{\mathbf{z}}, \overrightarrow{\beta}) p(\overrightarrow{\mathbf{z}} |\overrightarrow{\alpha}) \\
 &amp;amp;= \prod_{k=1}^K p(\overrightarrow{w}_{(k)} | \overrightarrow{z}_{(k)}, \overrightarrow{\beta}) \prod_{m=1}^M p(\overrightarrow{z}_m |\overrightarrow{\alpha}) \\
 &amp;amp;= \prod_{k=1}^K \frac{\Delta(\overrightarrow{n}_k+\overrightarrow{\beta})}{\Delta(\overrightarrow{\beta})} 
 \prod_{m=1}^M \frac{\Delta(\overrightarrow{n}_m+\overrightarrow{\alpha})}{\Delta(\overrightarrow{\alpha})}  
 \end{align}&lt;/div&gt;
-&lt;ol&gt;
-&lt;li&gt;写出排除当前词主题的条件概率公式，其实就是1中得到的两个联合概率的比值，全部都是Delta函数，而Delta函数又都可以表示成Gama函数，利用Gama(x+1) = x *&amp;nbsp;Game(x)的性质，得到最终结果，这个就是Gibbs采样公式&lt;/li&gt;
-&lt;/ol&gt;
+&lt;p&gt;2) 写出排除当前词主题的条件概率公式，其实就是1中得到的两个联合概率的比值，全部都是Delta函数，而Delta函数又都可以表示成Gama函数，利用Gama(x+1) = x *&amp;nbsp;Game(x)的性质，得到最终结果，这个就是Gibbs采样公式&lt;/p&gt;
 &lt;div class="math"&gt;\begin{align*} 
 \label{gibbs-sampling} 
 p(z_i = k|\overrightarrow{\mathbf{z}}_{\neg i}, \overrightarrow{\mathbf{w}}) \propto 
 \frac{n_{m,\neg i}^{(k)} + \alpha_k}{\sum_{k=1}^K (n_{m,\neg i}^{(k)} + \alpha_k)} 
 \cdot \frac{n_{k,\neg i}^{(t)} + \beta_t}{\sum_{t=1}^V (n_{k,\neg i}^{(t)} + \beta_t)} 
 \end{align*}&lt;/div&gt;
-&lt;ol&gt;
-&lt;li&gt;采样结束后，得到每篇文档每个词的主题，根据Dirichlet分布的期望，得到doc-topic这个多项分布的参数theta，以及topic-word这个多项分布的参数phi&lt;/li&gt;
-&lt;/ol&gt;
+&lt;p&gt;3)&amp;nbsp;采样结束后，得到每篇文档每个词的主题，根据Dirichlet分布的期望，得到doc-topic这个多项分布的参数theta，以及topic-word这个多项分布的参数phi&lt;/p&gt;
 &lt;h3 id="gibbslda"&gt;GibbsLDA++代码剖析&lt;/h3&gt;
 &lt;p&gt;相关编译和运行可以直接参考官方文档，这里只剖析一下代码。&lt;/p&gt;
 &lt;p&gt;整个代码的实现偏C风格，结构很清晰，注释也很丰富。&lt;/p&gt;
