@@ -1,5 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>当你老了</title><link href="/" rel="alternate"></link><link href="/feeds/tech.atom.xml" rel="self"></link><id>/</id><updated>2016-09-17T00:00:00+08:00</updated><entry><title>TextRank算法实现</title><link href="/posts/2016/09/17/textranksuan-fa-shi-xian.html" rel="alternate"></link><updated>2016-09-17T00:00:00+08:00</updated><author><name>lostfish</name></author><id>tag:,2016-09-17:posts/2016/09/17/textranksuan-fa-shi-xian.html</id><summary type="html">&lt;h3 id="_1"&gt;算法原理&lt;/h3&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>当你老了</title><link href="/" rel="alternate"></link><link href="/feeds/tech.atom.xml" rel="self"></link><id>/</id><updated>2016-10-22T00:00:00+08:00</updated><entry><title>Labeled-LDA算法理解</title><link href="/posts/2016/10/22/labeled-ldasuan-fa-li-jie.html" rel="alternate"></link><updated>2016-10-22T00:00:00+08:00</updated><author><name>lostfish</name></author><id>tag:,2016-10-22:posts/2016/10/22/labeled-ldasuan-fa-li-jie.html</id><summary type="html">&lt;h3 id="_1"&gt;引言&lt;/h3&gt;
+&lt;p&gt;Labeled &lt;span class="caps"&gt;LDA&lt;/span&gt; (L-&lt;span class="caps"&gt;LDA&lt;/span&gt;)是一个有监督的机器学习模型，主要应用是多类标分类，即给一篇文档打上多个类标。与&lt;span class="caps"&gt;LDA&lt;/span&gt;最大的不同之处为：L-&lt;span class="caps"&gt;LDA&lt;/span&gt;的主题限定为文档的类标集合，也就是说生成过程中的主题就是这些类标，不用人工指定主题数。&lt;/p&gt;
+&lt;h3 id="_2"&gt;模型理解&lt;/h3&gt;
+&lt;p&gt;L-&lt;span class="caps"&gt;LDA&lt;/span&gt;模型与原始&lt;span class="caps"&gt;LDA&lt;/span&gt;模型基本相同，变化很小，下面的理解全部参考原始论文[1]。&lt;/p&gt;
+&lt;p&gt;L-&lt;span class="caps"&gt;LDA&lt;/span&gt;概率图模型如下：&lt;/p&gt;
+&lt;p&gt;&lt;img alt="labeled_lda" src="/images/labeled_lda.png" /&gt;&lt;/p&gt;
+&lt;p&gt;去掉左下角Phi和Lamda所指向两条边就是原始的&lt;span class="caps"&gt;LDA&lt;/span&gt;主题模型。&lt;/p&gt;
+&lt;p&gt;其中：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;N(d)&amp;nbsp;是文档d的词数目&lt;/li&gt;
+&lt;li&gt;K是主题数目，也是类标数目，在L-&lt;span class="caps"&gt;LDA&lt;/span&gt;中，主题和类标是等价的&lt;/li&gt;
+&lt;li&gt;Alpha是主题共轭先验分布的参数，K维，Dirichlet分布（预先指定）&lt;/li&gt;
+&lt;li&gt;Eta是词共轭先验分布的参数，K维，Dirichlet分布（预先指定）&lt;/li&gt;
+&lt;li&gt;Eta(k)是主题k的词分布（多项分布）&lt;/li&gt;
+&lt;li&gt;Theta(d)是文档d的主题分布（多项分布）&lt;/li&gt;
+&lt;li&gt;Phi是主题先验分布，或者说类标先验分布，K维（预先统计）&lt;/li&gt;
+&lt;li&gt;Lambda(d)为K维指示向量，每一维度取值0或者1，表示文档d是否属于这个主题&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;生成过程如下：&lt;/p&gt;
+&lt;p&gt;&lt;img alt="labeled_lda2" src="/images/labeled_lda_2.png" /&gt;&lt;/p&gt;
+&lt;p&gt;说明：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;步骤1和2生成每个主题下的词分布，和原始&lt;span class="caps"&gt;LDA&lt;/span&gt;一样&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;步骤4-5统计文档d的K维指示向量，1表示文档d属于这个主题，0表示不属于，进而可以得到文档d的类标投射矩阵L(d),通过伯努利实验生成。假设有4个主题，文档d属于主题2和主题3， 那么L(d)表示为2*4的矩阵（第一行仅第2列为1，&amp;nbsp;第二行仅第3列为1）：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;0 1 0 0 
+0 0 1 0
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;步骤6根据类标投射矩阵L(d)得到文档d的超参数向量alpha(d)，原始alpha是K维，投影后变为M(d)维，其实就是文档d的类标数。还是使用上面的例子，文档的d包含主题2和3，那么这里M(d)就等于2，Alpha(d) = L(d)*Alpha = {alpha2,&amp;nbsp;alpha3}&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;步骤7根据alpha(d)生成M(d)个主题的分布theta(d)，与原始&lt;span class="caps"&gt;LDA&lt;/span&gt;不同，此处将主题限定在文档d对应的M(d)个主题中&lt;/li&gt;
+&lt;li&gt;步骤8-10 同原始&lt;span class="caps"&gt;LDA&lt;/span&gt;一样，先生成主题，再根据主题生成词&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;注&lt;/strong&gt;：步骤4-6可能是论文为了形式化，写的有点复杂，实际实现的时候没有这个伯努利实验的过程，直接从训练数据得到文档的类标，训练的时候主题限定在这个类标集合内进行Gibbs采样。&lt;/p&gt;
+&lt;h3 id="_3"&gt;算法实现&lt;/h3&gt;
+&lt;p&gt;搜索了一下，有如下的开源实现：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="http://www-nlp.stanford.edu/software/tmt/tmt-0.4/"&gt;http://www-nlp.stanford.edu/software/tmt/tmt-0.4/&lt;/a&gt;&amp;nbsp;(scala)&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/myleott/JGibbLabeledLDA"&gt;https://github.com/myleott/JGibbLabeledLD&lt;/a&gt;&amp;nbsp;(java）&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/shuyo/iir/blob/master/lda/llda.py"&gt;https://github.com/shuyo/iir/blob/master/lda/llda.py&lt;/a&gt;&amp;nbsp;（python）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;但是没有看到C++的，其实可以基于 &lt;a href="http://gibbslda.sourceforge.net/"&gt;GibbsLDA++&lt;/a&gt;&amp;nbsp;来改，只需要很小的改动就可以实现，这里说下大体思路，等有时间再实现：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;文档结构体中保留每篇文档的类标&lt;/li&gt;
+&lt;li&gt;Gibbs采样的时候，只在当前文档对应的类标集合里面采样，如果文档都是单类标，那么就不用采样。&lt;/li&gt;
+&lt;li&gt;预测函数不用变化，在新文档上得到所有主题的概率。如果是单类标分类，那么输出概率最大的主题；如果是多类标分类，输出大于一定阈值的所有主题。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id="_4"&gt;相关参考&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;[1] Labeled &lt;span class="caps"&gt;LDA&lt;/span&gt;: A supervised topic model for credit attribution in multi-labeled corpora (&lt;a href="http://nlp.stanford.edu/manning/papers/llda-emnlp09.pdf"&gt;pdf&lt;/a&gt;)&lt;/li&gt;
+&lt;/ul&gt;</summary><category term="labeled lda"></category><category term="主题模型"></category></entry><entry><title>TextRank算法实现</title><link href="/posts/2016/09/17/textranksuan-fa-shi-xian.html" rel="alternate"></link><updated>2016-09-17T00:00:00+08:00</updated><author><name>lostfish</name></author><id>tag:,2016-09-17:posts/2016/09/17/textranksuan-fa-shi-xian.html</id><summary type="html">&lt;h3 id="_1"&gt;算法原理&lt;/h3&gt;
 &lt;p&gt;TextRank算法主要用于文档的关键词抽取或者摘要抽取（本质是关键句抽取），原理就是PageRank的那一套思想，只不过构建图模型的时候稍有区别。&lt;/p&gt;
 &lt;p&gt;抽取关键词的时候，图的节点为词，边为滑动窗口中共现的词对，边的权重为两个词在滑动窗口中的共现次数。不是所有的词都考虑，一般只选取特定词性的词，如名词，形容词和动词。同时，滑动窗口也有一个长度，比如连续5个词。&lt;/p&gt;
 &lt;p&gt;抽取关键句的时候，图的节点为句子，边为文档中所有句子的两两组合，边的权重为两个句子的相似度，可分词后计算Jaccard相似度，或者更复杂点的提取语义向量计算余弦相似度，前者是原始论文[1]中的做法:
@@ -162,7 +216,7 @@ A,B,C   4    1
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;同时还观察了下空间消耗，占用内存达到了将近9G，比较惊人。当然这个数据集合本身频繁模式就比较多，平时应用中一般也不需要计算所有频繁项集，一般到频繁3项集或4项集就够了。&lt;/p&gt;
+&lt;p&gt;同时还观察了下空间消耗，占用内存达到了将近9G，比较惊人。当然这是因为在计算的过程中，保留了所有频繁集，如果每次计算完就直接输出，会节省很多空间。另外，这个数据集合本身频繁模式就比较多，平时应用中一般也不需要计算所有频繁项集，一般到频繁3项集或4项集就够了。&lt;/p&gt;
 &lt;h3 id="_4"&gt;相关参考&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;[1] &lt;a href="https://zh.wikipedia.org/zh/%E5%85%B3%E8%81%94%E5%BC%8F%E8%A7%84%E5%88%99"&gt;https://zh.wikipedia.org/zh/%E5%85%B3%E8%81%94%E5%&lt;span class="caps"&gt;BC&lt;/span&gt;%8F%E8%A7%84%E5%88%99&lt;/a&gt;&lt;/li&gt;
