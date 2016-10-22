@@ -446,6 +446,7 @@ crawl_page2 len: 0
 &lt;div class="math"&gt;\begin{align*} 
 Dir(\overrightarrow{p}|\overrightarrow{\alpha}) 
 &amp;amp;= \frac{\Gamma(\sum_{k=1}^K\alpha_k)} {\prod_{k=1}^K\Gamma(\alpha_k)} \prod_{k=1}^K {p_k^{\alpha_{k-1}} \\
+Dir(\overrightarrow{p}|\overrightarrow{\alpha}) 
 &amp;amp;= \frac{1}{\Delta(\overrightarrow{\alpha})} \prod_{k=1}^K p_k^{\alpha_k-1}
 \end{align*}&lt;/div&gt;
 &lt;/li&gt;
