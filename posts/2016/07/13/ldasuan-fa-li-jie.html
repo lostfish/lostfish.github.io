@@ -128,8 +128,7 @@ Dir(\overrightarrow{p}|\overrightarrow{\alpha})
 p(\overrightarrow{\mathbf{w}},\overrightarrow{\mathbf{z}} |\overrightarrow{\alpha}, \overrightarrow{\beta}) 
 &amp;= p(\overrightarrow{\mathbf{w}} |\overrightarrow{\mathbf{z}}, \overrightarrow{\beta}) p(\overrightarrow{\mathbf{z}} |\overrightarrow{\alpha}) \\
 &amp;= \prod_{k=1}^K p(\overrightarrow{w}_{(k)} | \overrightarrow{z}_{(k)}, \overrightarrow{\beta}) \prod_{m=1}^M p(\overrightarrow{z}_m |\overrightarrow{\alpha}) \\
-&amp;= \prod_{k=1}^K \frac{\Delta(\overrightarrow{n}_k+\overrightarrow{\beta})}{\Delta(\overrightarrow{\beta})} 
-\prod_{m=1}^M \frac{\Delta(\overrightarrow{n}_m+\overrightarrow{\alpha})}{\Delta(\overrightarrow{\alpha})}  
+&amp;= \prod_{k=1}^K \frac{\Delta(\overrightarrow{n}_k+\overrightarrow{\beta})}{\Delta(\overrightarrow{\beta})} \prod_{m=1}^M \frac{\Delta(\overrightarrow{n}_m+\overrightarrow{\alpha})}{\Delta(\overrightarrow{\alpha})}  
 \end{align*}</div>
 <p>2) 写出排除当前词主题的条件概率公式，其实就是1中得到的两个联合概率的比值，全部都是Delta函数，而Delta函数又都可以表示成Gama函数，利用Gama(x+1) = x *&nbsp;Game(x)的性质，得到最终结果，这个就是Gibbs采样公式</p>
 <div class="math">\begin{align*} 
