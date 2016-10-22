@@ -443,16 +443,12 @@ crawl_page2 len: 0
 \end{align*}&lt;/div&gt;
 &lt;/li&gt;
 &lt;li&gt;狄利克雷分布：容易发现先验是狄利克雷分布，似然是多项分布，两者相乘得到的后验也是狄利克雷分布
-&lt;div class="math"&gt;\begin{align*} 
+\begin{align*} 
 Dir(\overrightarrow{p}|\overrightarrow{\alpha}) 
-&amp;amp;= \frac{1}{\Delta(\overrightarrow{\alpha})} \prod_{k=1}^K p_k^{\alpha_k-1}
-\end{align*}&lt;/div&gt;
-&lt;/li&gt;
+&amp;amp;= \frac{1}{\Delta(\overrightarrow{\alpha})} \prod_{k=1}^K p_k^{\alpha_k-1}&amp;nbsp;\&lt;/li&gt;
 &lt;/ul&gt;
-&lt;div class="math"&gt;\begin{align*} 
-\int_{\overrightarrow{p}}^{} \prod_{k=1}^K p_k^{\alpha_k-1} = \Delta(\overrightarrow{\alpha})
-\end{align*}&lt;/div&gt;
-&lt;p&gt; 
+&lt;p&gt;&amp;amp;\int_{\overrightarrow{p}}^{} \prod_{k=1}^K p_k^{\alpha_k-1} = \Delta(\overrightarrow{\alpha})
+\end{align*} 
 - Delta函数/Gama函数： 狄利克雷分布函数中有一个Delta函数，有的地方也说Beta函数，可以表示成Gama函数的形式，而Gama(x+1) = x *&amp;nbsp;Game(x)
 &lt;/p&gt;
 &lt;div class="math"&gt;\begin{align*} 
@@ -465,9 +461,6 @@ p(\overrightarrow{\mathbf{w}},\overrightarrow{\mathbf{z}} |\overrightarrow{\alph
 &amp;amp;= p(\overrightarrow{\mathbf{w}} |\overrightarrow{\mathbf{z}}, \overrightarrow{\beta}) p(\overrightarrow{\mathbf{z}} |\overrightarrow{\alpha}) \\
 &amp;amp;= \prod_{k=1}^K p(\overrightarrow{w}_{(k)} | \overrightarrow{z}_{(k)}, \overrightarrow{\beta}) \prod_{m=1}^M p(\overrightarrow{z}_m |\overrightarrow{\alpha}) \\
 &amp;amp;= \prod_{k=1}^K \frac{\Delta(\overrightarrow{n}_k+\overrightarrow{\beta})}{\Delta(\overrightarrow{\beta})} 
-\end{align}&lt;/div&gt;
-&lt;div class="math"&gt;\begin{align} 
-\prod_{m=1}^M \frac{\Delta(\overrightarrow{n}_m+\overrightarrow{\alpha})}{\Delta(\overrightarrow{\alpha})}  
 \end{align}&lt;/div&gt;
 &lt;p&gt;2) 写出排除当前词主题的条件概率公式，其实就是1中得到的两个联合概率的比值，全部都是Delta函数，而Delta函数又都可以表示成Gama函数，利用Gama(x+1) = x *&amp;nbsp;Game(x)的性质，得到最终结果，这个就是Gibbs采样公式&lt;/p&gt;
 &lt;div class="math"&gt;\begin{align*} 
