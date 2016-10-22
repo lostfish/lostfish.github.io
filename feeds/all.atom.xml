@@ -445,8 +445,8 @@ crawl_page2 len: 0
 &lt;li&gt;狄利克雷分布：容易发现先验是狄利克雷分布，似然是多项分布，两者相乘得到的后验也是狄利克雷分布
 &lt;div class="math"&gt;\begin{align*} 
 \displaystyle Dir(\overrightarrow{p}|\overrightarrow{\alpha}) 
-&amp;amp; = \displaystyle \frac{\Gamma(\sum_{k=1}^K\alpha_k)} {\prod_{k=1}^K\Gamma(\alpha_k)} \prod_{k=1}^K p_k^{\alpha_k-1} \\
-&amp;amp; = \frac{1}{\Delta(\overrightarrow{\alpha})} \prod_{k=1}^K p_k^{\alpha_k-1}} \\
+&amp;amp;= \displaystyle \frac{\Gamma(\sum_{k=1}^K\alpha_k)} {\prod_{k=1}^K\Gamma(\alpha_k)} \prod_{k=1}^K p_k^{\alpha_k-1} \\
+&amp;amp;= \frac{1}{\Delta(\overrightarrow{\alpha})} \prod_{k=1}^K p_k^{\alpha_k-1}} \\
 \end{align*}&lt;/div&gt;
 &lt;div class="math"&gt;\begin{align*} 
 \int_{\overrightarrow{p}}^{} \prod_{k=1}^K p_k^{\alpha_k-1} = \Delta(\overrightarrow{\alpha})
@@ -461,8 +461,7 @@ crawl_page2 len: 0
 &lt;p&gt;Gibbs Sampling&amp;nbsp;推导过程：&lt;/p&gt;
 &lt;p&gt;1)&amp;nbsp;写出主题和词的联合概率公式，利用狄利克雷分布连乘部分积分等于Delta函数的性质，可以将联合分布只用Delta函数表示&lt;/p&gt;
 &lt;div class="math"&gt;\begin{align} 
-p(\overrightarrow{\mathbf{w}},\overrightarrow{\mathbf{z}} |\overrightarrow{\alpha}, \overrightarrow{\beta}) \\
-&amp;amp;= p(\overrightarrow{\mathbf{w}} |\overrightarrow{\mathbf{z}}, \overrightarrow{\beta}) p(\overrightarrow{\mathbf{z}} |\overrightarrow{\alpha}) \\
+p(\overrightarrow{\mathbf{w}},\overrightarrow{\mathbf{z}} |\overrightarrow{\alpha}, \overrightarrow{\beta}) = p(\overrightarrow{\mathbf{w}} |\overrightarrow{\mathbf{z}}, \overrightarrow{\beta}) p(\overrightarrow{\mathbf{z}} |\overrightarrow{\alpha}) \\
 &amp;amp;= \prod_{k=1}^K p(\overrightarrow{w}_{(k)} | \overrightarrow{z}_{(k)}, \overrightarrow{\beta}) \prod_{m=1}^M p(\overrightarrow{z}_m |\overrightarrow{\alpha}) \\
 &amp;amp;= \prod_{k=1}^K \frac{\Delta(\overrightarrow{n}_k+\overrightarrow{\beta})}{\Delta(\overrightarrow{\beta})} 
 \prod_{m=1}^M \frac{\Delta(\overrightarrow{n}_m+\overrightarrow{\alpha})}{\Delta(\overrightarrow{\alpha})}  
