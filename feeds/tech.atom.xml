@@ -445,8 +445,7 @@ crawl_page2 len: 0
 &lt;li&gt;狄利克雷分布：容易发现先验是狄利克雷分布，似然是多项分布，两者相乘得到的后验也是狄利克雷分布
 &lt;div class="math"&gt;\begin{align*} 
 Dir(\overrightarrow{p}|\overrightarrow{\alpha}) 
-&amp;amp;= \frac{\Gamma(\sum_{k=1}^K\alpha_k)} {\prod_{k=1}^K\Gamma(\alpha_k)} \prod_{k=1}^K {p_k^{\alpha_{k-1}} \\
-Dir(\overrightarrow{p}|\overrightarrow{\alpha}) 
+&amp;amp;= \frac{\Gamma(\sum_{k=1}^K\alpha_k)} {\prod_{k=1}^K\Gamma(\alpha_k)} {\prod_{k=1}^K p_k^{\alpha_{k-1}} \\
 &amp;amp;= \frac{1}{\Delta(\overrightarrow{\alpha})} \prod_{k=1}^K p_k^{\alpha_k-1}
 \end{align*}&lt;/div&gt;
 &lt;/li&gt;
@@ -473,7 +472,6 @@ p(\overrightarrow{\mathbf{w}},\overrightarrow{\mathbf{z}} |\overrightarrow{\alph
 \end{align}&lt;/div&gt;
 &lt;p&gt;2) 写出排除当前词主题的条件概率公式，其实就是1中得到的两个联合概率的比值，全部都是Delta函数，而Delta函数又都可以表示成Gama函数，利用Gama(x+1) = x *&amp;nbsp;Game(x)的性质，得到最终结果，这个就是Gibbs采样公式&lt;/p&gt;
 &lt;div class="math"&gt;\begin{align*} 
-\label{gibbs-sampling} 
 p(z_i = k|\overrightarrow{\mathbf{z}}_{\neg i}, \overrightarrow{\mathbf{w}}) \propto 
 \frac{n_{m,\neg i}^{(k)} + \alpha_k}{\sum_{k=1}^K (n_{m,\neg i}^{(k)} + \alpha_k)} 
 \cdot \frac{n_{k,\neg i}^{(t)} + \beta_t}{\sum_{t=1}^V (n_{k,\neg i}^{(t)} + \beta_t)} 
