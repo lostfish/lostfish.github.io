@@ -109,7 +109,8 @@
 <li>狄利克雷分布：容易发现先验是狄利克雷分布，似然是多项分布，两者相乘得到的后验也是狄利克雷分布
 <div class="math">\begin{align*} 
 Dir(\overrightarrow{p}|\overrightarrow{\alpha}) 
-= \frac{\Gamma(\sum_{k=1}^K\alpha_k)} {\prod_{k=1}^K\Gamma(\alpha_k)} \prod_{k=1}^K p_k^{\alpha_k-1} 
+&amp;= \frac{\Gamma(\sum_{k=1}^K\alpha_k)} {\prod_{k=1}^K\Gamma(\alpha_k)} \prod_{k=1}^K {p_k^{\alpha_{k-1}} \\
+&amp;= \frac{1}{\Delta(\overrightarrow{\alpha})} \prod_{k=1}^K p_k^{\alpha_k-1}
 \end{align*}</div>
 </li>
 </ul>
