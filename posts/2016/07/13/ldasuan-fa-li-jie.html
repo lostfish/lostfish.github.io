@@ -107,24 +107,24 @@
 \end{align*}</div>
 </li>
 <li>狄利克雷分布：容易发现先验是狄利克雷分布，似然是多项分布，两者相乘得到的后验也是狄利克雷分布
-\begin{align*} 
+<div class="math">\begin{align*} 
 Dir(\overrightarrow{p}|\overrightarrow{\alpha}) 
-&amp;= \frac{1}{\Delta(\overrightarrow{\alpha})} \prod_{k=1}^K p_k^{\alpha_k-1}&nbsp;\</li>
-</ul>
-<p>&amp;\int_{\overrightarrow{p}}^{} \prod_{k=1}^K p_k^{\alpha_k-1} = \Delta(\overrightarrow{\alpha})
-\end{align*} 
-- Delta函数/Gama函数： 狄利克雷分布函数中有一个Delta函数，有的地方也说Beta函数，可以表示成Gama函数的形式，而Gama(x+1) = x *&nbsp;Game(x)
-</p>
+&amp;= \frac{1}{\Delta(\overrightarrow{\alpha})} \prod_{k=1}^K p_k^{\alpha_k-1} \\
+&amp;\int_{\overrightarrow{p}}^{} \prod_{k=1}^K p_k^{\alpha_k-1} = \Delta(\overrightarrow{\alpha})
+\end{align*}</div>
+</li>
+<li>Delta函数/Gama函数： 狄利克雷分布函数中有一个Delta函数，有的地方也说Beta函数，可以表示成Gama函数的形式，而Gama(x+1) = x * Game(x)
 <div class="math">\begin{align*} 
 \Delta(\overrightarrow{\alpha}) = \frac{\prod_{k=1}^K\Gamma(\alpha_k)} {\Gamma(\sum_{k=1}^K\alpha_k)}
 \end{align*}</div>
+</li>
+</ul>
 <p>Gibbs Sampling&nbsp;推导过程：</p>
 <p>1)&nbsp;写出主题和词的联合概率公式，利用狄利克雷分布连乘部分积分等于Delta函数的性质，可以将联合分布只用Delta函数表示</p>
 <div class="math">\begin{align} 
 p(\overrightarrow{\mathbf{w}},\overrightarrow{\mathbf{z}} |\overrightarrow{\alpha}, \overrightarrow{\beta}) 
 &amp;= p(\overrightarrow{\mathbf{w}} |\overrightarrow{\mathbf{z}}, \overrightarrow{\beta}) p(\overrightarrow{\mathbf{z}} |\overrightarrow{\alpha}) \\
-&amp;= \prod_{k=1}^K p(\overrightarrow{w}_{(k)} | \overrightarrow{z}_{(k)}, \overrightarrow{\beta}) \prod_{m=1}^M p(\overrightarrow{z}_m |\overrightarrow{\alpha}) \\
-&amp;= \prod_{k=1}^K \frac{\Delta(\overrightarrow{n}_k+\overrightarrow{\beta})}{\Delta(\overrightarrow{\beta})} 
+&amp;= \prod_{k=1}^K p(\overrightarrow{w}_{(k)} | \overrightarrow{z}_{(k)}, \overrightarrow{\beta}) \prod_{m=1}^M p(\overrightarrow{z}_m |\overrightarrow{\alpha}) \prod_{k=1}^K \frac{\Delta(\overrightarrow{n}_k+\overrightarrow{\beta})}{\Delta(\overrightarrow{\beta})} 
 \end{align}</div>
 <p>2) 写出排除当前词主题的条件概率公式，其实就是1中得到的两个联合概率的比值，全部都是Delta函数，而Delta函数又都可以表示成Gama函数，利用Gama(x+1) = x *&nbsp;Game(x)的性质，得到最终结果，这个就是Gibbs采样公式</p>
 <div class="math">\begin{align*} 
